@@ -146,12 +146,8 @@ def scroll():
             commoms = positions(images['super_rare-text'], threshold = ct['super_rare'])
             if (len(commoms) == 0):
                 commoms = positions(images['epic-text'], threshold = ct['epic'])
-                if (len(commoms) == 0):
-                    commoms = positions(images['legend-text'], threshold = ct['legend'])
-                    if (len(commoms) == 0):
-                        commoms = positions(images['super-legend-text'], threshold = ct['super_legend'])
-                        if (len(commoms) == 0):                
-                            return
+                if (len(commoms) == 0):          
+                    return
     x,y,w,h = commoms[len(commoms)-1]
 
     moveToWithRandomness(x,y,1)
@@ -193,7 +189,7 @@ def isWorking(bar, buttons):
             return False
     return True
 
-def clickGreenBarButtons(baus):
+def clickGreenBarButtons():
     offset = 140
 
     green_bars = positions(images['green-bar'], threshold=ct['green_bar'])
@@ -203,15 +199,7 @@ def clickGreenBarButtons(baus):
 
     not_working_green_bars = []
     for bar in green_bars:
-        global deveTrabalhar
-        global raridade
-        raridade = descobreRaridade(bar)
-        deveTrabalhar = 1
-
-        if raridade != 'commom' and (baus >= 60 or baus == 0):
-            deveTrabalhar = 0
-
-        if (not isWorking(bar, buttons)) and deveTrabalhar == 1:
+        if not isWorking(bar, buttons):
             not_working_green_bars.append(bar)
     if len(not_working_green_bars) > 0:
         logger('🆗 %d Botoes com barra verde detectados' % len(not_working_green_bars))
