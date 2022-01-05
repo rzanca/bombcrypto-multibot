@@ -3,7 +3,7 @@
   telegram_log:
     token: 'Digite aqui seu TOKEN API'
     chatid: 'Digite aqui seu CHAT ID'
-    conta: 'Conta 01'
+    contas: 'Digite aqui o número de contas'
     
   # Configurações de intervalos de tempo
   time_intervals:

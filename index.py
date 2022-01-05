@@ -23,14 +23,41 @@ stream = open("config.yaml", 'r')
 c = yaml.safe_load(stream)
 ct = c['threshold']
 ch = c['home']
-
+cn = c['telegram_log']
 pyautogui.PAUSE = c['time_intervals']['interval_between_moviments']
-
+pyautogui.FAILSAFE = False
 hc = HumanClicker()
 pyautogui.MINIMUM_DURATION = 0.1
 pyautogui.MINIMUM_SLEEP = 0.1
 pyautogui.PAUSE = 2
+TELEGRAM_BOT_TOKEN = cn['token']
+TELEGRAM_CHAT_ID  = cn['chatid']
+CONTA = cn['conta']
+bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+saldo_atual = 0.0
 
+def telegram_bot_sendtext(bot_message, num_try=0):
+    global bot
+    try:
+        return bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=bot_message)
+    except:
+        if num_try == 1:
+            bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+            return telegram_bot_sendtext(bot_message, 1)
+        return 0
+
+def telegram_bot_sendphoto(photo_path, num_try=0):
+    global bot
+    try:
+        return bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=open(photo_path, "rb"))
+    except:
+        if num_try == 1:
+            bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+            return telegram_bot_sendphoto(photo_path, 1)
+        return 0
+
+test = telegram_bot_sendtext("🔌 Bot inicializado em " + CONTA + " Contas. \n\n 💰 É hora de faturar alguns BCoins!!!")
+        
 cat = """
 >>---> BOT original do https://github.com/mpcabete/bombcrypto-bot/
 
@@ -147,7 +174,9 @@ def scroll():
             if (len(commoms) == 0):
                 commoms = positions(images['epic-text'], threshold = ct['epic'])
                 if (len(commoms) == 0):          
-                    return
+                    commoms = positions(images['legend-text'], threshold = ct['legend'])
+                    if (len(commoms) == 0):
+                        return
     x,y,w,h = commoms[len(commoms)-1]
 
     moveToWithRandomness(x,y,1)
@@ -322,7 +351,6 @@ def sendHeroesHome():
         else:
             print('Heroi já está na casa, ou a casa está cheia.')
 
-
 def refreshHeroes():
     logger('🏢 Procurando herois para trabalhar')
     
@@ -353,6 +381,114 @@ def refreshHeroes():
         time.sleep(2)
     logger('💪 {} Herois enviado para o trabalho'.format(hero_clicks))
     goToGame()
+   
+def goSaldo():
+    logger('Consultando seu saldo')
+    time.sleep(2)
+    global saldo_atual
+    clickBtn(images['consultar-saldo'])
+    i = 10
+    coins_pos = positions(images['coin-icon'], threshold=ct['default'])
+    while(len(coins_pos) == 0):
+        if i <= 0:
+            break
+        i = i - 1
+        coins_pos = positions(images['coin-icon'], threshold=ct['default'])
+        time.sleep(5)
+    
+    if(len(coins_pos) == 0):
+        logger("Saldo não encontrado.")
+        clickBtn(images['x'])
+        return
+
+    k,l,m,n = coins_pos[0]
+    k = k - 44
+    l = l + 130
+    m = 200
+    n = 50
+
+    myScreen = pyautogui.screenshot(region=(k, l, m, n))
+    img_dir = os.path.dirname(os.path.realpath(__file__)) + r'\targets\saldo1.png'
+    myScreen.save(img_dir)
+    time.sleep(2)
+    enviar = ('🚨 Seu saldo Bcoins 🚀🚀🚀 em '% currentWindow["window"].title)
+    test = telegram_bot_sendtext(enviar)
+    telegram_bot_sendphoto(img_dir)
+
+    clickBtn(images['x'])
+
+def getDifference(then, now=datetime.now(), interval="horas"):
+
+    duration = now - then
+    duration_in_s = duration.total_seconds()
+
+    yr_ct = 365 * 24 * 60 * 60  
+    day_ct = 24 * 60 * 60  
+    hour_ct = 60 * 60  
+    minute_ct = 60
+
+    def yrs():
+        return divmod(duration_in_s, yr_ct)[0]
+
+    def days():
+        return divmod(duration_in_s, day_ct)[0]
+
+    def hrs():
+        return divmod(duration_in_s, hour_ct)[0]
+
+    def mins():
+        return divmod(duration_in_s, minute_ct)[0]
+
+    def secs():
+        return duration_in_s
+
+    return {
+        "anos": int(yrs()),
+        "dias": int(days()),
+        "horas": int(hrs()),
+        "minutos": int(mins()),
+        "segundos": int(secs()),
+    }[interval]
+
+def tempoGastoParaComletarMapa():
+    try:
+        data_inicio_mapa = None
+        caminho = (
+            os.path.dirname(os.path.realpath(__file__)) + r"\savedvars\tempo_mapa.txt"
+        )
+        with open(caminho, "r") as text_file:
+            data_inicio_mapa = text_file.readline()
+            if data_inicio_mapa == "":
+                data_inicio_mapa = datetime.now()
+
+            if not isinstance(data_inicio_mapa, datetime):
+                data_inicio_mapa = datetime.strptime(
+                    data_inicio_mapa, "%Y-%m-%d %H:%M:%S.%f"
+                )
+            intervalo = "horas"
+            horas_gastas = getDifference(
+                data_inicio_mapa, now=datetime.now(), interval=intervalo
+            )
+            if horas_gastas == 0:
+                intervalo = "minutos"
+                horas_gastas = getDifference(
+                    data_inicio_mapa, now=datetime.now(), interval=intervalo
+                )
+            if horas_gastas == 0:
+                intervalo = "segundos"
+                horas_gastas = getDifference(
+                    data_inicio_mapa, now=datetime.now(), interval=intervalo
+                )
+
+            telegram_bot_sendtext(
+                f"Demoramos {horas_gastas} {intervalo} para concluir o mapa em "% currentWindow["window"].title"."
+            )
+        with open(caminho, "w") as text_file_write:
+            data_inicio_mapa = datetime.now()
+            text_file_write.write(str(data_inicio_mapa))
+
+    except:
+        logger("Não conseguiu obter informações do tempo de conclusão do mapa.")   
    
 def main():
     global hero_clicks
@@ -387,7 +523,8 @@ def main():
             "login": 0,
             "heroes": 0,
             "new_map": 0,
-            "refresh_heroes": 0
+            "refresh_heroes": 0,
+            "ssaldo": 0
         })
 
     if len(windows) >= 1:
@@ -416,13 +553,25 @@ def main():
                 if now - currentWindow["new_map"] > t['check_for_new_map_button']:
                     currentWindow["new_map"] = now
 
-                    if clickBtn(images['new-map']):
-                        loggerMapClicked()
+                if clickBtn(images["new-map"]):
+                    telegram_bot_sendtext(f"Completamos mais um mapa em "% currentWindow["window"].title"!")
+                    tempoGastoParaComletarMapa()
+                    loggerMapClicked()
+                    time.sleep(3)
+                    num_jaulas = len(positions(images["jail"], threshold=0.8))
+                    if num_jaulas > 0:
+                        telegram_bot_sendtext(
+                            f"Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em "% currentWindow["window"].title"."
+                            )
 
 
                 if now - currentWindow["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
                     currentWindow["refresh_heroes"] = now
                     refreshHeroesPositions()
+                    
+                if now - currentWindow["ssaldo"] > addRandomness(t['get_saldo'] * 60):
+                currentWindow["ssaldo"] = now
+                goSaldo()    
             
                 logger(None, progress_indicator=True)
 
