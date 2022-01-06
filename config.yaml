@@ -1,9 +1,8 @@
 ---
   # Configurações de conexão para Telegram
   telegram_log:
-    token: 'Digite aqui seu TOKEN API'
-    chatid: 'Digite aqui seu CHAT ID'
-    contas: 'Digite aqui o número de contas'
+    token: 'Digite aqui seu Token API'
+    chatid: 'Digite aqui seu Chat ID'
     
   # Configurações de intervalos de tempo
   time_intervals:

@@ -18,7 +18,6 @@ import telegram
 import os
 import pygetwindow
 
-
 stream = open("config.yaml", 'r')
 c = yaml.safe_load(stream)
 ct = c['threshold']
@@ -32,7 +31,6 @@ pyautogui.MINIMUM_SLEEP = 0.1
 pyautogui.PAUSE = 2
 TELEGRAM_BOT_TOKEN = cn['token']
 TELEGRAM_CHAT_ID  = cn['chatid']
-CONTA = cn['conta']
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 saldo_atual = 0.0
 
@@ -55,15 +53,13 @@ def telegram_bot_sendphoto(photo_path, num_try=0):
             bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
             return telegram_bot_sendphoto(photo_path, 1)
         return 0
-
-test = telegram_bot_sendtext("🔌 Bot inicializado em " + CONTA + " Contas. \n\n 💰 É hora de faturar alguns BCoins!!!")
-        
+       
 cat = """
 >>---> BOT original do https://github.com/mpcabete/bombcrypto-bot/
 
 >>---> Modificações por RZancA
 
->>---> Pressione ctrl + c para parar o BOT.
+>>---> Pressione ctrl + c ou feche o prompt para parar o BOT.
 
 >>---> As configurações variáveis estão em config.yaml"""
 
@@ -411,85 +407,12 @@ def goSaldo():
     img_dir = os.path.dirname(os.path.realpath(__file__)) + r'\targets\saldo1.png'
     myScreen.save(img_dir)
     time.sleep(2)
-    enviar = ('🚨 Seu saldo Bcoins 🚀🚀🚀 em '% currentWindow["window"].title)
+    enviar = ("🚨 Seu saldo Bcoins 🚀🚀🚀 em %s" % curwind)
     test = telegram_bot_sendtext(enviar)
     telegram_bot_sendphoto(img_dir)
 
     clickBtn(images['x'])
-
-def getDifference(then, now=datetime.now(), interval="horas"):
-
-    duration = now - then
-    duration_in_s = duration.total_seconds()
-
-    yr_ct = 365 * 24 * 60 * 60  
-    day_ct = 24 * 60 * 60  
-    hour_ct = 60 * 60  
-    minute_ct = 60
-
-    def yrs():
-        return divmod(duration_in_s, yr_ct)[0]
-
-    def days():
-        return divmod(duration_in_s, day_ct)[0]
-
-    def hrs():
-        return divmod(duration_in_s, hour_ct)[0]
-
-    def mins():
-        return divmod(duration_in_s, minute_ct)[0]
-
-    def secs():
-        return duration_in_s
-
-    return {
-        "anos": int(yrs()),
-        "dias": int(days()),
-        "horas": int(hrs()),
-        "minutos": int(mins()),
-        "segundos": int(secs()),
-    }[interval]
-
-def tempoGastoParaComletarMapa():
-    try:
-        data_inicio_mapa = None
-        caminho = (
-            os.path.dirname(os.path.realpath(__file__)) + r"\savedvars\tempo_mapa.txt"
-        )
-        with open(caminho, "r") as text_file:
-            data_inicio_mapa = text_file.readline()
-            if data_inicio_mapa == "":
-                data_inicio_mapa = datetime.now()
-
-            if not isinstance(data_inicio_mapa, datetime):
-                data_inicio_mapa = datetime.strptime(
-                    data_inicio_mapa, "%Y-%m-%d %H:%M:%S.%f"
-                )
-            intervalo = "horas"
-            horas_gastas = getDifference(
-                data_inicio_mapa, now=datetime.now(), interval=intervalo
-            )
-            if horas_gastas == 0:
-                intervalo = "minutos"
-                horas_gastas = getDifference(
-                    data_inicio_mapa, now=datetime.now(), interval=intervalo
-                )
-            if horas_gastas == 0:
-                intervalo = "segundos"
-                horas_gastas = getDifference(
-                    data_inicio_mapa, now=datetime.now(), interval=intervalo
-                )
-
-            telegram_bot_sendtext(
-                f"Demoramos {horas_gastas} {intervalo} para concluir o mapa em "% currentWindow["window"].title"."
-            )
-        with open(caminho, "w") as text_file_write:
-            data_inicio_mapa = datetime.now()
-            text_file_write.write(str(data_inicio_mapa))
-
-    except:
-        logger("Não conseguiu obter informações do tempo de conclusão do mapa.")   
-   
+  
 def main():
     global hero_clicks
     global login_attempts
@@ -511,7 +434,7 @@ def main():
     print(cat)
     time.sleep(5)
     t = c['time_intervals']
-
+    global windows
     windows = []
 
     for window in pygetwindow.getWindowsWithTitle('Bombcrypto'):
@@ -522,20 +445,21 @@ def main():
             "window": window,
             "login": 0,
             "heroes": 0,
+            "ssaldo": 0,
             "new_map": 0,
-            "refresh_heroes": 0,
-            "ssaldo": 0
+            "refresh_heroes": 0
         })
 
     if len(windows) >= 1:
         print('>>---> %d janelas com o nome Bombcrypto encontradas!' % len(windows))
+        test = telegram_bot_sendtext("🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!" % len(windows))
 
         while True:
             for currentWindow in windows:
                 currentWindow["window"].activate()
                 if currentWindow["window"].isMaximized == False:
                     currentWindow["window"].maximize()
-
+                
                 print('>>---> Janela atual: %s' % currentWindow["window"].title)
 
                 time.sleep(2)
@@ -554,24 +478,24 @@ def main():
                     currentWindow["new_map"] = now
 
                 if clickBtn(images["new-map"]):
-                    telegram_bot_sendtext(f"Completamos mais um mapa em "% currentWindow["window"].title"!")
-                    tempoGastoParaComletarMapa()
+                    telegram_bot_sendtext(f"Completamos mais um mapa em %s" % currentWindow["window"].title)
                     loggerMapClicked()
                     time.sleep(3)
                     num_jaulas = len(positions(images["jail"], threshold=0.8))
                     if num_jaulas > 0:
                         telegram_bot_sendtext(
-                            f"Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em "% currentWindow["window"].title"."
-                            )
+                            f"Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em %s" % currentWindow["window"].title)
 
 
                 if now - currentWindow["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
                     currentWindow["refresh_heroes"] = now
                     refreshHeroesPositions()
                     
-                if now - currentWindow["ssaldo"] > addRandomness(t['get_saldo'] * 60):
-                currentWindow["ssaldo"] = now
-                goSaldo()    
+                if now - currentWindow["ssaldo"] > addRandomness( t['get_saldo'] * 60):
+                    currentWindow["ssaldo"] = now
+                    global curwind
+                    curwind = currentWindow["window"].title                
+                    goSaldo()    
             
                 logger(None, progress_indicator=True)
 

@@ -1,0 +1,20 @@
+Como criar seu Telegram BOT
+
+1 - No Telegram, pesquise @BotFather, envie a ele uma mensagem “ / start ”
+
+2 - Envie outra mensagem “ / newbot ” e siga as instruções para configurar um nome e um nome de usuário.
+
+3 - Seu bot agora está pronto, certifique-se de salvar um backup do seu token de API.
+
+4 - No Telegram, procure seu bot (pelo nome de usuário que você acabou de criar), pressione o botão “Iniciar” ou envie uma mensagem “ / start ”
+
+5 - Abra uma nova guia com seu navegador, insira https://api.telegram.org/bot<yourtoken>/getUpdates, substitua <yourtoken> pelo token de API, pressione Enter e você verá algo como isto:
+
+{"ok":true,"result":[{"update_id":77xxxxxxx,
+"message":{"message_id":550,"from":{"id":34xxxxxxx,"is_bot":false,"first_name":"Man Hay","last_name":"Hong","username":"manhay212","language_code":"en-HK"}
+
+6 - Salve o id do chat que acabou de aparecer.
+
+7 - Abra o arquivo config.yaml com o notepad++ ou outro editor de sua preferência.
+
+8 - Edite as linhas dentro de telegram_log, com os valores salvos anteriormente.
