@@ -42,11 +42,11 @@ Escolha um nome para seu bot.
 Após isso escolha um nome de usuário para ele, o final precisa conter a palavra bot.
 Salve o Token API para uso futuro
 
-![token] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/token.png?raw=true)
+![token](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/token.png?raw=true)
 
 Pesquise o usuário do seu bot e envie o comando /start
 
-![meubot] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png?raw=true)
+![meubot](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png?raw=true)
 
 No navegador acesse o link abaixo, não esqueça de incluir o seu token api depois da palavra bot.
 
@@ -54,21 +54,21 @@ https://api.telegram.org/bot/getupdates
 
 Após isso, anote o chatid conforme a imagem abaixo.
 
-![link] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png?raw=true)
+![link](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png?raw=true)
 
 Abra o arquivo config.yaml pelo bloco de notas ou outro editor
 
-![config] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png?raw=true)
+![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png?raw=true)
 
 Modifique os campos token e chatid com os valores salvos anteriormente. 
 Salve o arquivo.
 
-![log] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog.png?raw=true)
+![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog.png?raw=true)
 
 ### Iniciando o Bot
 
 Apenas execute o arquivo IniciarBOT 
 
-![iniciar] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png?raw=true)
+![iniciar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png?raw=true)
 
 ### Algumas configuraçoes podem ser mudadas no arquivo config.yaml, nao se esqueça de reiniciar o bot caso mude as configuraçoes.
