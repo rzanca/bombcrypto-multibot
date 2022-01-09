@@ -170,7 +170,7 @@ def scroll():
             if (len(commoms) == 0):
                 commoms = positions(images['epic-text'], threshold=ct['epic'])
                 if (len(commoms) == 0):          
-                    commoms = positions(images['legend-text'], threshold ct['legend'])
+                    commoms = positions(images['legend-text'], threshold=ct['legend'])
                     if (len(commoms) == 0):
                         commoms = positions(images['super_legend-text'], threshold=ct['super_legend'])
                         if (len(commoms) == 0):
