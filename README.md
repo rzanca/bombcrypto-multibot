@@ -1,4 +1,4 @@
-# BOT - MultiContas para BombCrypto
+# BOT - MultiContas para BombCrypto - v 0.3.2
 
 ## Funções extras:
 - Envios de notificações via Telegram:
