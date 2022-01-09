@@ -20,7 +20,7 @@ python ao PATH:
 
 ### Realize o download do codigo no formato zip, e extraia o arquivo.
 
-![zipcode] (https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
+![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
 
 ### Instale o BOT
 
