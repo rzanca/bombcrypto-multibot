@@ -162,17 +162,19 @@ def positions(target, threshold=ct['default'],img = None):
 
 def scroll():
 
-    commoms = positions(images['commom-text'], threshold = ct['commom'])
+    commoms = positions(images['commom-text'], threshold=ct['commom'])
     if (len(commoms) == 0):
-        commoms = positions(images['rare-text'], threshold = ct['rare'])
+        commoms = positions(images['rare-text'], threshold=ct['rare'])
         if (len(commoms) == 0):
-            commoms = positions(images['super_rare-text'], threshold = ct['super_rare'])
+            commoms = positions(images['super_rare-text'], threshold=ct['super_rare'])
             if (len(commoms) == 0):
-                commoms = positions(images['epic-text'], threshold = ct['epic'])
+                commoms = positions(images['epic-text'], threshold=ct['epic'])
                 if (len(commoms) == 0):          
-                    commoms = positions(images['legend-text'], threshold = ct['legend'])
+                    commoms = positions(images['legend-text'], threshold ct['legend'])
                     if (len(commoms) == 0):
-                        return
+                        commoms = positions(images['super_legend-text'], threshold=ct['super_legend'])
+                        if (len(commoms) == 0):
+                            return
     x,y,w,h = commoms[len(commoms)-1]
 
     moveToWithRandomness(x,y,1)

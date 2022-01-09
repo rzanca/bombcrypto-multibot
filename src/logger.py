@@ -3,7 +3,6 @@ from src.date import dateFormatted
 import sys
 import yaml
 
-
 stream = open("./config.yaml", 'r')
 c = yaml.safe_load(stream)
 
@@ -19,8 +18,7 @@ COLOR = {
     'green': '\033[92m',
     'magenta': '\033[95m',
     'white': '\033[97m',
-    'red': '\033[91m'
-}
+    'red': '\033[91m'}
 
 def logger(message, progress_indicator = False, color = 'default'):
     global last_log_is_progress
@@ -30,12 +28,10 @@ def logger(message, progress_indicator = False, color = 'default'):
     formatted_message = "[{}] => {}".format(formatted_datetime, message)
     formatted_message_colored  = color_formatted + formatted_message + '\033[0m'
 
-    
-    # Start progress indicator and append dots to in subsequent progress calls
     if progress_indicator:
         if not last_log_is_progress:
             last_log_is_progress = True
-            formatted_message = color_formatted + "[{}] => {}".format(formatted_datetime, '⬆️ Processing last action..')
+            formatted_message = color_formatted + "[{}] => {}".format(formatted_datetime, '⬆️ Processando a última ação..')
             sys.stdout.write(formatted_message)
             sys.stdout.flush()
         else:
@@ -58,7 +54,7 @@ def logger(message, progress_indicator = False, color = 'default'):
     return True
 
 def loggerMapClicked():
-  logger('🗺️ New Map button clicked!')
+  logger('🗺️ Clicado no botão novo mapa!')
   logger_file = open("./logs/new-map.log", "a", encoding='utf-8')
   logger_file.write(dateFormatted() + '\n')
   logger_file.close()

@@ -2,6 +2,6 @@
 from subprocess import Popen
 
 while True:
-    print("\nStarting")
+    print("\nIniciando BOT ")
     p = Popen("python index.py", shell=True)
     p.wait() 
