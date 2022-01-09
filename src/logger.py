@@ -47,7 +47,7 @@ def logger(message, progress_indicator = False, color = 'default'):
     print(formatted_message_colored)
 
     if (c['save_log_to_file'] == True):
-        logger_file = open("./logs/logger.log", "a", encoding='utf-8')
+        logger_file = open("./log/logger.log", "a", encoding='utf-8')
         logger_file.write(formatted_message + '\n')
         logger_file.close()
 
@@ -55,6 +55,6 @@ def logger(message, progress_indicator = False, color = 'default'):
 
 def loggerMapClicked():
   logger('🗺️ Clicado no botão novo mapa!')
-  logger_file = open("./logs/new-map.log", "a", encoding='utf-8')
+  logger_file = open("./log/new-map.log", "a", encoding='utf-8')
   logger_file.write(dateFormatted() + '\n')
   logger_file.close()
