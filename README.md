@@ -72,3 +72,11 @@ Apenas execute o arquivo IniciarBOT
 ![iniciar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png?raw=true)
 
 ### Algumas configuraçoes podem ser mudadas no arquivo config.yaml, nao se esqueça de reiniciar o bot caso mude as configuraçoes.
+
+## Importante
+
+### Linguagem do Jogo: Inglês
+### Linguagem da Metamask: Inglês
+### Zoom do Navegador: 100%
+### Escala do Monitor: 100%
+
