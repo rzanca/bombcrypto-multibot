@@ -1,4 +1,4 @@
-# BOT - MultiContas para BombCrypto - v 0.3.2
+# BOT - MultiContas para BombCrypto - v 0.3.3
 
 ## Funções extras:
 - Envios de notificações via Telegram:
@@ -8,6 +8,9 @@
 - Reinicio automático em caso de falha na execução
 - Identificação e Controle Automático das Janelas do BombCrypto
 - Coloca os heróis para trabalhar conforme variável
+	- Full = Envia apenas com energia cheia
+	- Green = Envia apenas com energia verde
+	- All = Envia todos heróis pelo novo botão
 - Todos os tempos de execução podem ser configurados
 
 ## Tutorial de Instalação
@@ -80,3 +83,5 @@ Apenas execute o arquivo IniciarBOT
 ### Zoom do Navegador: 100%
 ### Escala do Monitor: 100%
 
+##Curtiu? Faça sua doação... Wallet BEP20
+###0xc11ed49D4c8cAe4EBdE49091c90543b17079d894
