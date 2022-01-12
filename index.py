@@ -18,7 +18,7 @@ import telegram
 import os
 import pygetwindow
 
-stream = open("config.yaml", 'r')
+stream = open('config.yaml', 'r')
 c = yaml.safe_load(stream)
 ct = c['threshold']
 ch = c['home']
@@ -47,21 +47,24 @@ def telegram_bot_sendtext(bot_message, num_try=0):
 def telegram_bot_sendphoto(photo_path, num_try=0):
     global bot
     try:
-        return bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=open(photo_path, "rb"))
+        return bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=open(photo_path, 'rb'))
     except:
         if num_try == 1:
             bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
             return telegram_bot_sendphoto(photo_path, 1)
         return 0
        
-cat = """
->>---> BOT original do https://github.com/mpcabete/bombcrypto-bot/
+cat = '''
+>>---> BOT - MultiContas para BombCrypto - v 0.3.3 
 
->>---> Modificações por RZancA
+>>---> https://github.com/rzanca/bombcrypto-multibot/
+
+>>---> Curtiu? Faça sua doação... Wallet BEP20
+>>---> 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894
 
 >>---> Pressione ctrl + c ou feche o prompt para parar o BOT.
 
->>---> As configurações variáveis estão em config.yaml"""
+>>---> As configurações variáveis estão em config.yaml'''
 
 def addRandomness(n, randomn_factor_size=None):
     if randomn_factor_size is None:
@@ -84,11 +87,11 @@ def remove_suffix(input_string, suffix):
     return input_string
 
 def load_images():
-    file_names = listdir("./targets/")
+    file_names = listdir('./targets/')
     targets = {}
     for file in file_names:
-        path = "targets/" + file
-        targets[remove_suffix(file, ".png")] = cv2.imread(path)
+        path = 'targets/' + file
+        targets[remove_suffix(file, '.png')] = cv2.imread(path)
 
     return targets
 
@@ -114,7 +117,7 @@ def show(rectangles, img = None):
     cv2.imshow('img',img)
     cv2.waitKey(0)
 
-def clickBtn(img, name=None, timeout=3, threshold=ct["default"]):
+def clickBtn(img, name=None, timeout=3, threshold=ct['default']):
     logger(None, progress_indicator=True)
     if not name is None:
         pass
@@ -161,39 +164,22 @@ def positions(target, threshold=ct['default'],img = None):
     return rectangles
 
 def scroll():
-
-    commoms = positions(images['commom-text'], threshold=ct['commom'])
-    if (len(commoms) == 0):
-        commoms = positions(images['rare-text'], threshold=ct['rare'])
-        if (len(commoms) == 0):
-            commoms = positions(images['super_rare-text'], threshold=ct['super_rare'])
-            if (len(commoms) == 0):
-                commoms = positions(images['epic-text'], threshold=ct['epic'])
-                if (len(commoms) == 0):          
-                    commoms = positions(images['legend-text'], threshold=ct['legend'])
-                    if (len(commoms) == 0):
-                        commoms = positions(images['super_legend-text'], threshold=ct['super_legend'])
-                        if (len(commoms) == 0):
-                            return
-    x,y,w,h = commoms[len(commoms)-1]
-
+    hero_item_list = positions(images['hero-item'], threshold = ct['commom'])
+    if (len(hero_item_list) == 0):
+        return
+    x,y,w,h = hero_item_list[len(hero_item_list)-1]
     moveToWithRandomness(x,y,1)
 
     if not c['use_click_and_drag_instead_of_scroll']:
         pyautogui.scroll(-c['scroll_size'])
     else:
         pyautogui.dragRel(0,-c['click_and_drag_amount'],duration=1, button='left')
-
-def clickButtons():
-    buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
+   
+def SendAll():
+    buttons = positions(images['send-all'], threshold=ct['go_to_work_btn'])
     for (x, y, w, h) in buttons:
         moveToWithRandomness(x+(w/2),y+(h/2),1)
         pyautogui.click()
-        global hero_clicks
-        hero_clicks = hero_clicks + 1
-        if hero_clicks > 20:
-            logger('⚠️ Houve muitos cliques em herois, tente aumentar o go_to_work_btn threshold')
-            return
     return len(buttons)
 
 def isHome(hero, buttons):
@@ -349,35 +335,44 @@ def sendHeroesHome():
         else:
             print('Heroi já está na casa, ou a casa está cheia.')
 
+def SendHeroesToWork():
+    if c['select_heroes_mode'] == 'full':
+        return clickFullBarButtons()
+    elif c['select_heroes_mode'] == 'green':
+        return clickGreenBarButtons()
+    else:
+        return SendAll()
+
 def refreshHeroes():
     logger('🏢 Procurando herois para trabalhar')
     
     goToHeroes()
 
-    if c['select_heroes_mode'] == "full":
+    if c['select_heroes_mode'] == 'full':
         logger('⚒️ Enviando herois com a energia cheia para o trabalho', 'green')
-    elif c['select_heroes_mode'] == "green":
+    elif c['select_heroes_mode'] == 'green':
         logger('⚒️ Enviando herois com a energia verde para o trabalho', 'green')
     else:
         logger('⚒️ Enviando todos herois para o trabalho', 'green')
 
-    buttonsClicked = 1
     empty_scrolls_attempts = c['scroll_attemps']
-
-    while(empty_scrolls_attempts >0):
-        if c['select_heroes_mode'] == 'full':
-            buttonsClicked = clickFullBarButtons()
-        elif c['select_heroes_mode'] == 'green':
-            buttonsClicked = clickGreenBarButtons()
-        else:
-            buttonsClicked = clickButtons()
-
-        sendHeroesHome()
-        if buttonsClicked == 0:
-            empty_scrolls_attempts = empty_scrolls_attempts - 1
-        scroll()
+    send_all_work = False
+    if not ch['enable'] and c['select_heroes_mode'] == 'all':
+        time.sleep(1)
+        send_all_work = SendAll()
+        if send_all_work:
+            logger('💪 ALL heroes sent to work')
         time.sleep(2)
-    logger('💪 {} Herois enviado para o trabalho'.format(hero_clicks))
+
+    if not send_all_work:
+        buttonsClicked = 0
+        while(empty_scrolls_attempts >0):
+            SendHeroesToWork()
+            sendHeroesHome()
+            empty_scrolls_attempts = empty_scrolls_attempts - 1
+            scroll()
+            time.sleep(2)
+        logger('💪 {} Herois enviado para o trabalho'.format(hero_clicks))
     goToGame()
    
 def goSaldo():
@@ -395,7 +390,7 @@ def goSaldo():
         time.sleep(5)
     
     if(len(coins_pos) == 0):
-        logger("Saldo não encontrado.")
+        logger('Saldo não encontrado.')
         clickBtn(images['x'])
         return
 
@@ -409,7 +404,7 @@ def goSaldo():
     img_dir = os.path.dirname(os.path.realpath(__file__)) + r'\targets\saldo1.png'
     myScreen.save(img_dir)
     time.sleep(2)
-    enviar = ("🚨 Seu saldo Bcoins 🚀🚀🚀 em %s" % curwind)
+    enviar = ('🚨 Seu saldo Bcoins 🚀🚀🚀 em %s' % curwind)
     test = telegram_bot_sendtext(enviar)
     telegram_bot_sendphoto(img_dir)
 
@@ -444,59 +439,59 @@ def main():
             continue
 
         windows.append({
-            "window": window,
-            "login": 0,
-            "heroes": 0,
-            "ssaldo": 0,
-            "new_map": 0,
-            "refresh_heroes": 0
+            'window': window,
+            'login': 0,
+            'heroes': 0,
+            'ssaldo': 0,
+            'new_map': 0,
+            'refresh_heroes': 0
         })
 
     if len(windows) >= 1:
         print('>>---> %d janelas com o nome Bombcrypto encontradas!' % len(windows))
-        test = telegram_bot_sendtext("🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!" % len(windows))
+        test = telegram_bot_sendtext('🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!' % len(windows))
 
         while True:
             for currentWindow in windows:
-                currentWindow["window"].activate()
-                if currentWindow["window"].isMaximized == False:
-                    currentWindow["window"].maximize()
+                currentWindow['window'].activate()
+                if currentWindow['window'].isMaximized == False:
+                    currentWindow['window'].maximize()
                 
-                print('>>---> Janela atual: %s' % currentWindow["window"].title)
+                print('>>---> Janela atual: %s' % currentWindow['window'].title)
 
                 time.sleep(2)
                 now = time.time()
 
-                if now - currentWindow["heroes"] > addRandomness(t['send_heroes_for_work'] * 60):
-                    currentWindow["heroes"] = now
+                if now - currentWindow['heroes'] > addRandomness(t['send_heroes_for_work'] * 60):
+                    currentWindow['heroes'] = now
                     refreshHeroes()
 
-                if now - currentWindow["login"] > addRandomness(t['check_for_login'] * 60):
+                if now - currentWindow['login'] > addRandomness(t['check_for_login'] * 60):
                     sys.stdout.flush()
-                    currentWindow["login"] = now
+                    currentWindow['login'] = now
                     login()
 
-                if now - currentWindow["new_map"] > t['check_for_new_map_button']:
-                    currentWindow["new_map"] = now
+                if now - currentWindow['new_map'] > t['check_for_new_map_button']:
+                    currentWindow['new_map'] = now
 
-                if clickBtn(images["new-map"]):
-                    telegram_bot_sendtext(f"Completamos mais um mapa em %s" % currentWindow["window"].title)
+                if clickBtn(images['new-map']):
+                    telegram_bot_sendtext(f'Completamos mais um mapa em %s' % currentWindow['window'].title)
                     loggerMapClicked()
                     time.sleep(3)
-                    num_jaulas = len(positions(images["jail"], threshold=0.8))
+                    num_jaulas = len(positions(images['jail'], threshold=0.8))
                     if num_jaulas > 0:
                         telegram_bot_sendtext(
-                            f"Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em %s" % currentWindow["window"].title)
+                            f'Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em %s' % currentWindow['window'].title)
 
 
-                if now - currentWindow["refresh_heroes"] > addRandomness( t['refresh_heroes_positions'] * 60):
-                    currentWindow["refresh_heroes"] = now
+                if now - currentWindow['refresh_heroes'] > addRandomness( t['refresh_heroes_positions'] * 60):
+                    currentWindow['refresh_heroes'] = now
                     refreshHeroesPositions()
                     
-                if now - currentWindow["ssaldo"] > addRandomness( t['get_saldo'] * 60):
-                    currentWindow["ssaldo"] = now
+                if now - currentWindow['ssaldo'] > addRandomness( t['get_saldo'] * 60):
+                    currentWindow['ssaldo'] = now
                     global curwind
-                    curwind = currentWindow["window"].title                
+                    curwind = currentWindow['window'].title                
                     goSaldo()    
             
                 logger(None, progress_indicator=True)

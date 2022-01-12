@@ -18,3 +18,5 @@ __pycache__/
 
 # vscode plugins
 /.history
+log/logger.log
+log/logger.log

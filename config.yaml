@@ -28,8 +28,8 @@
     interval_between_moviments: 1
     
     # Intervalo de tempo para verificar se o saldo aumentou
-    # Valor padrão (em minutos): 50
-    get_saldo: 50
+    # Valor padrão (em minutos): 60
+    get_saldo: 60
 
   # O quão confiante o bot precisa estar para clicar nos botões (valores entre 0 e 1. 0 é o valor mínimo, 1 é o valor máximo)
   threshold:
@@ -93,8 +93,8 @@
   # Valor padrão: 60
   scroll_size: 60
 
-  # Valor padrão: 3
-  scroll_attemps: 3
+  # Valor padrão: 5
+  scroll_attemps: 5
 
   # Valor padrão: true
   use_click_and_drag_instead_of_scroll: true
