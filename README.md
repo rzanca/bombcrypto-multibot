@@ -1,8 +1,8 @@
-# BOT - MultiContas para BombCrypto - v 0.3.3
+# BOT - MultiContas para BombCrypto - v 0.4.0
 
 ## Funções extras:
 - Envios de notificações via Telegram:
-	- Aviso de Bot Inicializado
+	- Aviso de Inicialização do Bot
 	- Aviso de Conclusão de Mapa
 	- Saldo em BCOINS
 - Reinicio automático em caso de falha na execução
@@ -10,7 +10,7 @@
 - Coloca os heróis para trabalhar conforme variável
 	- Full = Envia apenas com energia cheia
 	- Green = Envia apenas com energia verde
-	- All = Envia todos heróis pelo novo botão
+	- All = Envia todos os heróis pelo novo botão
 - Todos os tempos de execução podem ser configurados
 
 ## Tutorial de Instalação
@@ -21,7 +21,7 @@ Se você baixar pelo site é importante marcar a opção para adicionar o
 python ao PATH:
 ![Check Add python to PATH](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/path.png?raw=true)
 
-### Realize o download do codigo no formato zip, e extraia o arquivo.
+### Realize o download do código no formato zip, e extraia o arquivo.
 
 ![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
 
@@ -34,28 +34,28 @@ python ao PATH:
 Abra seu Telegram pelo celular ou web.
 Pesquise o @BotFather
 
-![botfather](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/botfather.png?raw=true)
+![bot-father](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/botfather.png?raw=true)
 
 Digite o comando /start
 Após isso, clique ou digite o comando /newbot
 
 ![tb](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegrambot.png?raw=true)
 
-Escolha um nome para seu bot.
-Após isso escolha um nome de usuário para ele, o final precisa conter a palavra bot.
+Escolha um nome para o seu Bot.
+Após isso escolha um nome de usuário para ele, o final precisa conter a palavra Bot.
 Salve o Token API para uso futuro
 
 ![token](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/token.png?raw=true)
 
 Pesquise o usuário do seu bot e envie o comando /start
 
-![meubot](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png?raw=true)
+![meu-bot](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png?raw=true)
 
-No navegador acesse o link abaixo, não esqueça de incluir o seu token api depois da palavra bot.
+No navegador acesse o link abaixo, não esqueça de incluir o seu token api depois da palavra Bot.
 
 https://api.telegram.org/bot/getupdates
 
-Após isso, anote o chatid conforme a imagem abaixo.
+Após isso, anote o chat id conforme a imagem abaixo.
 
 ![link](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png?raw=true)
 
@@ -63,7 +63,7 @@ Abra o arquivo config.yaml pelo bloco de notas ou outro editor
 
 ![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png?raw=true)
 
-Modifique os campos token e chatid com os valores salvos anteriormente. 
+Modifique os campos token e chat id com os valores salvos anteriormente. 
 Salve o arquivo.
 
 ![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog.png?raw=true)
@@ -74,14 +74,18 @@ Apenas execute o arquivo IniciarBOT
 
 ![iniciar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png?raw=true)
 
-### Algumas configuraçoes podem ser mudadas no arquivo config.yaml, nao se esqueça de reiniciar o bot caso mude as configuraçoes.
+### Algumas configurações podem ser mudadas no arquivo config.yaml, nao se esqueça de reiniciar o Bot. caso mude as configurações.
 
 ## Importante
 
-### Linguagem do Jogo: Inglês
+### Linguagem do Jogo: inglês
 ### Linguagem da Metamask: Inglês
-### Zoom do Navegador: 100%
+### Ampliação do Navegador: 100%
 ### Escala do Monitor: 100%
 
 ## Curtiu? Faça sua doação... Wallet BEP20
 ### 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894
+
+## Suporte
+### [Telegram Canal Oficial](https://t.me/+5BR9zCbqBm44ODQx)
+### [Telegram Grupo Oficial](https://t.me/+sKjgrt4K6VxjNDNh)

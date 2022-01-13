@@ -1,8 +1,9 @@
 ---
   # Configurações de conexão para Telegram
   telegram_log:
-    token: 'Digite aqui seu Token API'
-    chatid: 'Digite aqui seu Chat ID'
+    active: True
+    token: 'token'
+    chatid: 'chat'
     
   # Configurações de intervalos de tempo
   time_intervals:
@@ -19,25 +20,25 @@
     # Valor padrão (em segundos): 5
     check_for_new_map_button: 2
     
-    # Intervalo de tempo para verificar se existe solicitação de login
+    # Intervalo de tempo para verificar se existe solicitação de ‘login’
     # Valor padrão (em minutos): 5
     check_for_login: 5
 
     # Intervalo de tempo entre movimentos
     # Valor padrão (em segundos): 1
-    interval_between_moviments: 1
+    interval_between_movements: 1
     
     # Intervalo de tempo para verificar se o saldo aumentou
     # Valor padrão (em minutos): 60
-    get_saldo: 60
+    get_balance: 60
 
-  # O quão confiante o bot precisa estar para clicar nos botões (valores entre 0 e 1. 0 é o valor mínimo, 1 é o valor máximo)
+  # O quão confiante o Bot. precisa estar para clicar nos botões (valores entre 0 e 1. Onde 0 é o valor mínimo, 1 é o valor máximo)
   threshold:
     # Valor padrão: 0.7
     default: 0.7
 
     # Valor padrão: 0.8
-    commom: 0.8
+    common: 0.8
 
     # Valor padrão: 0.8
     rare: 0.8
@@ -94,7 +95,7 @@
   scroll_size: 60
 
   # Valor padrão: 5
-  scroll_attemps: 5
+  scroll_attempts: 5
 
   # Valor padrão: true
   use_click_and_drag_instead_of_scroll: true
@@ -103,12 +104,12 @@
   click_and_drag_amount: 200
 
   # Valor padrão: green
-  # all   = seleciona todos os heróis (independente da barra de stamina)
+  # all = utiliza o comando enviar todos
   # green = seleciona os heróis com a barra de stamina verde (metade ou cheia)
-  # full  = seleciona somente os heróis com a barra de stamina cheia
+  # full = seleciona somente os heróis com a barra de stamina cheia
   select_heroes_mode: "green"
 
   # Opção para salvar os logs em arquivo (logs.txt)
-  # Valor padrão : False
+  # Valor padrão: False
   # Opções disponíveis: False ou True
   save_log_to_file: True
