@@ -14,4 +14,4 @@ requests==2.26.0
 python-telegram-bot
 pyclick
 imutils
-Pyllow
+Pillow
