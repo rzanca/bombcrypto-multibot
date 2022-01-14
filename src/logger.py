@@ -4,8 +4,8 @@ from src.date import dateFormatted
 import sys
 import yaml
 
-stream = open("./config.yaml", 'r')
-c = yaml.safe_load(stream)
+with open('./config.yaml','r',encoding='utf-8') as open_yml:
+    c = yaml.safe_load(open_yml)
 
 last_log_is_progress = False
 

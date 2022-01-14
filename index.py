@@ -16,8 +16,8 @@ import telegram
 import os
 import pygetwindow
 
-stream = open('config.yaml', 'r')
-c = yaml.safe_load(stream)
+with open('./config.yaml','r',encoding='utf-8') as open_yml:
+    c = yaml.safe_load(open_yml)
 ct = c['threshold']
 ch = c['home']
 cn = c['telegram_log']
