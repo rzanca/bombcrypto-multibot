@@ -18,7 +18,7 @@ class Bot:
     self.images = self.load_images()
     self.windows = self.load_windows()
 
-    self.telegram = Telegram(self.login, self.search_for_workable_heroes, self.refresh_heroes_positions)
+    self.telegram = Telegram(self.login, self.search_for_workable_heroes, self.refresh_heroes_positions, self.go_balance)
     self.hero_clicks = 0
     self.login_attempts = 0
     self.last_log_is_progress = False

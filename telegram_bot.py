@@ -5,7 +5,7 @@ from configuration import Configuration
 
 class Telegram:
 
-  def __init__(self, login_method: None, search_for_workable_heroes: None, refresh_heroes_positions_method: None):
+  def __init__(self, login_method: None, search_for_workable_heroes: None, refresh_heroes_positions_method: None, balance_method: None):
     self.active = Configuration.telegram['active']
     if self.active:
       self.token = Configuration.telegram['token']
@@ -13,6 +13,7 @@ class Telegram:
       self.login_method = login_method
       self.search_for_workable_heroes = search_for_workable_heroes
       self.refresh_heroes_positions_method = refresh_heroes_positions_method
+      self.balance_method = balance_method
 
       if int(len(self.token)) > 10 and int(len(self.chatid) >=5):
         self.bot = self.criar_bot_telegram()
@@ -20,6 +21,10 @@ class Telegram:
         self.dispatcher = self.updater.dispatcher
         self.dispatcher.add_handler(CommandHandler("start", self.start_command))
         self.dispatcher.add_handler(MessageHandler(Filters.text, self.message_handler))
+
+        self.telsendtext('''
+        /start Iniciar Bot
+        ''')
         self.updater.start_polling()
         print('>>---> Notificações no Telegram habilitadas.\n')
       else:
@@ -29,7 +34,8 @@ class Telegram:
     buttons = [
       [KeyboardButton("Login")], 
       [KeyboardButton("Send Heroes To Work")],
-      [KeyboardButton("Refresh Heroes Positions")]
+      [KeyboardButton("Refresh Heroes Positions")],
+      [KeyboardButton("Balance")]
     ]
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bem vindo!", reply_markup=ReplyKeyboardMarkup(buttons))
@@ -41,6 +47,8 @@ class Telegram:
       self.search_for_workable_heroes(True)
     elif "Refresh Heroes Positions" in update.message.text:
       self.search_for_workable_heroes(True)
+    elif "Balance" in update.message.text:
+      self.balance_method(True)
 
   def criar_bot_telegram(self):
     return telegram.Bot(token=self.token)
