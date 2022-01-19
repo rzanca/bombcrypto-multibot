@@ -1,16 +1,16 @@
 ---
   # Configurações de conexão para Telegram
-  telegram_log:
-    active: True
-    token: 'token'
-    chatid: 'chat'
+  telegram:
+    active: False
+    token: ''
+    chatid: ''
     
   # Configurações de intervalos de tempo
   time_intervals:
     
     # Intervalo de tempo para verificar se há heróis disponíveis para trabalhar
     # Valor padrão (em minutos): 10
-    send_heroes_for_work: 10
+    send_heroes_for_work: 90
     
     # Intervalo de tempo para atualizar a posição dos heróis no mapa
     # Valor padrão (em minutos): 3
@@ -59,25 +59,7 @@
     select_wallet_buttons: 0.8
 
     # Valor padrão: 0.9
-    go_to_work_btn: 0.9
-    
-    # Valor padrão: 0.7
-    bau_roxo: 0.7
-
-    # Valor padrão: 0.8
-    bau_roxo_50: 0.8
-
-    # Valor padrão: 0.7
-    bau_gold: 0.7
-
-    # Valor padrão: 0.8
-    bau_gold_50: 0.8
-
-    # Valor padrão: 0.7
-    bau_blue: 0.7
-
-    # Valor padrão: 0.8
-    bau_blue_50: 0.8
+    go_to_work_btn: 0.8
 
     # Valor padrão: 0.9
     green_bar: 0.9
@@ -107,7 +89,7 @@
   # all = utiliza o comando enviar todos
   # green = seleciona os heróis com a barra de stamina verde (metade ou cheia)
   # full = seleciona somente os heróis com a barra de stamina cheia
-  select_heroes_mode: "green"
+  select_heroes_mode: "all"
 
   # Opção para salvar os logs em arquivo (logs.txt)
   # Valor padrão: False
