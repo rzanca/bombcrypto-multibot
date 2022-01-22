@@ -1,4 +1,4 @@
-# BOT - MultiAccount for BombCrypto - v 0.4.0
+# BOT - MultiAccount for BombCrypto - v 0.4.1
 
 ## Extra functions:
 - Sending notifications via Telegram:
@@ -12,6 +12,7 @@
   - Green = Sends only with green energy
   - All = Send all heroes by new button
 - All runtimes can be configured
+- Refresh the page as set time
 
 ## Installation Tutorial
 
@@ -82,6 +83,7 @@ Just run the IniciarBOT file
 ### Metamask language: English
 ### Browser Zoom: 100%
 ### Monitor Scale: 100%
+### Need to keep the game maximized
 
 ## Did you like it? make your donation... Wallet BEP20
 ### 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894

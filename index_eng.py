@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-    
-from src.logger import logger, loggerMapClicked
+from src.logger_eng import logger, loggerMapClicked
 from cv2 import cv2
 from os import listdir
 from random import randint
@@ -34,12 +34,12 @@ if telegram_notify is True:
     if int(len(cn['token'])) > 10 and int(len(cn['chatid']) >=5 ):
         bot = telegram.Bot(token=cn['token'])
         tchat = cn['chatid']
-        print('>>---> Notificações no Telegram habilitadas.\n')
+        print('>>---> Telegram notifications enabled.\n')
     else:
-        print('>>---> Erro na configuração do Telegram, notificações desabilitadas.\n')
+        print('>>---> Telegram configuration error, notifications disabled.\n')
         telegram_notify = False
 else:
-    print('>>---> Notificações no Telegram desabilitadas.\n')
+    print('>>---> Telegram notifications disabled.\n')
 
 
 
@@ -66,16 +66,16 @@ def telsendphoto(photo_path, num_try=0):
 
 
 cat = '''
->>---> BOT - MultiContas para BombCrypto - v 0.4.1 
+>>---> BOT - MultiAccounts for BombCrypto - v 0.4.1 
 
 >>---> https://github.com/rzanca/bombcrypto-multibot/
 
->>---> Curtiu? Faça sua doação... Wallet BEP20
+>>---> Did you like it? make your donation... Wallet BEP20
 >>---> 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894
 
->>---> Pressione ctrl + c ou feche o prompt para parar o BOT.
+>>---> Press ctrl + c or close the prompt to stop the BOT.
 
->>---> As configurações variáveis estão em config.yaml'''
+>>---> Variable settings are in config.yaml'''
 
 
 def addrandomness(n, randomn_factor_size=None):
@@ -121,7 +121,7 @@ def loadheroestosendhome():
         path = './targets/heroes-to-send-home/' + file
         heroes.append(cv2.imread(path))
 
-    print('>>---> %d Heróis que devem ser mandados para casa carregados.' % len(heroes))
+    print('>>---> %d Heroes who must be sent home loaded.' % len(heroes))
     return heroes
 
 
@@ -206,7 +206,7 @@ def sendall():
     return len(buttons)
 
 def restall():
-    logger('🏢 Colocando heróis para descansar')
+    logger('🏢 Laying Heroes to Rest')
     gotoheroes()
     time.sleep(1)
     buttons = positions(images['rest-all'], threshold=ct['go_to_work_btn'])
@@ -215,7 +215,6 @@ def restall():
         pyautogui.click()
         time.sleep(2)
     return len(buttons)
-
 
 def ishome(hero, buttons):
     y = hero[1]
@@ -243,17 +242,17 @@ def clickgreenbarbuttons():
     offset = 140
 
     green_bars = positions(images['green-bar'], threshold=ct['green_bar'])
-    logger('🟩 %d Barras verdes detectadas' % len(green_bars))
+    logger('🟩 %d Green bars detected' % len(green_bars))
     buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
-    logger('🆗 %d Botoes detectados' % len(buttons))
+    logger('🆗 %d Buttons detected' % len(buttons))
 
     not_working_green_bars = []
     for bar in green_bars:
         if not isworking(bar, buttons):
             not_working_green_bars.append(bar)
     if len(not_working_green_bars) > 0:
-        logger('🆗 %d Botoes com barra verde detectados' % len(not_working_green_bars))
-        logger('👆 Clicando em %d heróis' % len(not_working_green_bars))
+        logger('🆗 %d Green bar buttons detected' % len(not_working_green_bars))
+        logger('👆 Clicking on %d heroes' % len(not_working_green_bars))
 
     hero_clicks_cnt = 0
     for (x, y, w, h) in not_working_green_bars:
@@ -263,7 +262,7 @@ def clickgreenbarbuttons():
         hero_clicks = hero_clicks + 1
         hero_clicks_cnt = hero_clicks_cnt + 1
         if hero_clicks_cnt > 20:
-            logger('⚠️ Houve muitos cliques em heróis, tente aumentar o go_to_work_btn threshold')
+            logger('⚠️ There were too many clicks on heroes, try to increase the go_to_work_btn threshold')
             return
     return len(not_working_green_bars)
 
@@ -279,7 +278,7 @@ def clickfullbarbuttons():
             not_working_full_bars.append(bar)
 
     if len(not_working_full_bars) > 0:
-        logger('👆 Clicando em %d heróis' % len(not_working_full_bars))
+        logger('👆 Clicking on %d heroes' % len(not_working_full_bars))
 
     for (x, y, w, h) in not_working_full_bars:
         movetowithrandomness(x + offset + (w / 2), y + (h / 2), 1)
@@ -314,9 +313,9 @@ def refreshheroespositions():
 
 def login():
     global login_attempts
-    logger('😿 Checando se o jogo se desconectou')
+    logger('😿 Checking if the game has disconnected')
     if clickbtn(images['connect-wallet'], timeout=10):
-        logger('🎉 Botão de conexão da carteira encontrado, logando!')
+        logger('🎉 Wallet connection button found, logging in!')
         login_attempts = login_attempts + 1
         clickbtn(images['select-wallet-2'], timeout=8)
         time.sleep(10)
@@ -326,7 +325,7 @@ def login():
         return
 
     if login_attempts > 3:
-        logger('🔃 Muitas tentativas de login, atualizando')
+        logger('🔃 Too many login attempts, refreshing')
         login_attempts = 0
         pyautogui.hotkey('ctrl', 'f5')
         return
@@ -337,7 +336,6 @@ def login():
         time.sleep(10)
         login()
         pass
-
 
 def sendheroeshome():
     if not ch['enable']:
@@ -351,9 +349,9 @@ def sendheroeshome():
 
     n = len(heroes_positions)
     if n == 0:
-        print('Nenhum herói que deveria ser enviado para casa encontrado.')
+        print('No hero that should be sent home found.')
         return
-    print(' %d Heróis que devem ser enviados para casa encontrados.' % n)
+    print(' %d Heroes that must be sent home found.' % n)
     go_home_buttons = positions(images['send-home'], threshold=ch['home_button_threshold'])
     go_work_buttons = positions(images['go-work'], threshold=ct['go_to_work_btn'])
 
@@ -361,14 +359,14 @@ def sendheroeshome():
         if not ishome(position, go_home_buttons):
             print(isworking(position, go_work_buttons))
             if not isworking(position, go_work_buttons):
-                print('Herói não está trabalhando, enviando para casa.')
+                print('Hero is not working, sending home.')
                 movetowithrandomness(go_home_buttons[0][0] + go_home_buttons[0][2] / 2, position[1] + position[3] / 2,
                                      1)
                 pyautogui.click()
             else:
-                print('Herói está trabalhando, não será enviado para casa.')
+                print('Hero is working, will not be sent home.')
         else:
-            print('Herói já está na casa, ou a casa está cheia.')
+            print('Hero is already in the house, or the house is full.')
 
 
 def sendheroestowork():
@@ -381,16 +379,16 @@ def sendheroestowork():
 
 
 def refreshheroes():
-    logger('🏢 Procurando heróis para trabalhar')
+    logger('🏢 Looking for heroes to work')
 
     gotoheroes()
 
     if c['select_heroes_mode'] == 'full':
-        logger('⚒️ Enviando heróis com a energia cheia para o trabalho', color='green')
+        logger('⚒️ Sending full-energy heroes to work', 'green')
     elif c['select_heroes_mode'] == 'green':
-        logger('⚒️ Enviando heróis com a energia verde para o trabalho', color='green')
+        logger('⚒️ Sending Heroes with Green Energy to Work', 'green')
     else:
-        logger('⚒️ Enviando todos heróis para o trabalho', color='green')
+        logger('⚒️ Sending all heroes to work', 'green')
 
     empty_scrolls_attempts = c['scroll_attempts']
     send_all_work = False
@@ -408,12 +406,12 @@ def refreshheroes():
             empty_scrolls_attempts = empty_scrolls_attempts - 1
             scroll()
             time.sleep(2)
-        logger('💪 {} Heróis enviados para o trabalho'.format(hero_clicks))
+        logger('💪 {} Heroes sent to work'.format(hero_clicks))
     gotogame()
 
 
 def gobalance():
-    logger('Consultando seu saldo')
+    logger('Checking your balance')
     time.sleep(2)
     global saldo_atual
     clickbtn(images['consultar-saldo'])
@@ -427,7 +425,7 @@ def gobalance():
         time.sleep(5)
 
     if len(coins_pos) == 0:
-        logger('Saldo não encontrado.')
+        logger('Balance not found.')
         clickbtn(images['x'])
         return
 
@@ -441,7 +439,7 @@ def gobalance():
     img_dir = os.path.dirname(os.path.realpath(__file__)) + r'\targets\saldo1.png'
     myscreen.save(img_dir)
     time.sleep(2)
-    enviar = ('🚨 Seu saldo Bcoins 🚀🚀🚀 em %s' % curwind)
+    enviar = ('🚨 Your balance Bcoins 🚀🚀🚀 in %s' % curwind)
     telsendtext(enviar)
     telsendphoto(img_dir)
 
@@ -463,7 +461,7 @@ def main():
         global home_heroes
         home_heroes = loadheroestosendhome()
     else:
-        print('>>---> Modo Casa não habilitado')
+        print('>>---> Home mode not enabled')
     print('\n')
 
     print(cat)
@@ -487,9 +485,9 @@ def main():
         })
 
     if len(windows) >= 1:
-        print('>>---> %d janelas com o nome Bombcrypto encontradas!' % len(windows))
+        print('>>---> %d windows named Bombcrypto found!' % len(windows))
         telsendtext(
-            '🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!' % len(windows))
+            '🔌 Bot starting in %d accounts. \n\n 💰 It is time to make some BCoins!!!' % len(windows))
 
         while True:
             for currentWindow in windows:
@@ -497,13 +495,13 @@ def main():
                 if not currentWindow['window'].isMaximized:
                     currentWindow['window'].maximize()
 
-                print('>>---> Janela atual: %s' % currentWindow['window'].title)
+                print('>>---> Current window: %s' % currentWindow['window'].title)
 
                 time.sleep(2)
                 now = time.time()
 
                 if now - currentWindow['refresh_page'] > addrandomness(t['check_for_refresh_page'] * 60):
-                    logger('🔃 Atualizando o jogo')
+                    logger('🔃 Refreshing the game')
                     currentWindow['refresh_page'] = now
                     restall()
                     pyautogui.hotkey('ctrl', 'f5')
@@ -521,13 +519,13 @@ def main():
                     currentWindow['new_map'] = now
 
                 if clickbtn(images['new-map']):
-                    telsendtext(f'Completamos mais um mapa em %s' % currentWindow['window'].title)
+                    telsendtext(f'We completed another map in %s' % currentWindow['window'].title)
                     loggerMapClicked()
                     time.sleep(3)
                     num_jaulas = len(positions(images['jail'], threshold=0.8))
                     if num_jaulas > 0:
                         telsendtext(
-                            f'Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em %s' % currentWindow[
+                            f'Congratulations we have {num_jaulas} new cage(s) on the new map 🎉🎉🎉 in %s' % currentWindow[
                                 'window'].title)
 
                 if now - currentWindow['refresh_heroes'] > addrandomness(t['refresh_heroes_positions'] * 60):
@@ -548,7 +546,7 @@ def main():
                 time.sleep(1)
 
     else:
-        print('>>---> Nenhuma janela com o nome Bombcrypto encontrada!')
+        print('>>---> No windows named Bombcrypto found!')
 
 
 if __name__ == '__main__':

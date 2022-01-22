@@ -21,18 +21,18 @@ COLOR = {
     'white': '\033[97m',
     'red': '\033[91m'}
 
-def logger(message, progress_indicator = False, color = 'default', line_break=''):
+def logger(message, progress_indicator = False, color = 'default'):
     global last_log_is_progress
     color_formatted = COLOR.get(color.lower(), COLOR['default'])
 
     formatted_datetime = date_formatted()
-    formatted_message = f'{line_break}[{formatted_datetime}] => {message}'
+    formatted_message = "[{}] => {}".format(formatted_datetime, message)
     formatted_message_colored  = color_formatted + formatted_message + '\033[0m'
 
     if progress_indicator:
         if not last_log_is_progress:
             last_log_is_progress = True
-            formatted_message = f'{color_formatted}[{formatted_datetime}] => ⬆️ Processando a última ação...'
+            formatted_message = color_formatted + "[{}] => {}".format(formatted_datetime, '⬆️ Processing the last action...')
             sys.stdout.write(formatted_message)
             sys.stdout.flush()
         else:
@@ -43,19 +43,19 @@ def logger(message, progress_indicator = False, color = 'default', line_break=''
     if last_log_is_progress:
         sys.stdout.write('\n')
         sys.stdout.flush()
-        last_log_is_progress = False
+        last_log_is_progress = False    
 
     print(formatted_message_colored)
 
     if (c['save_log_to_file'] == True):
-        logger_file = open('./log/logger.log', 'a', encoding='utf-8')
-        logger_file.write(f'{formatted_message}\n')
+        logger_file = open("./log/logger.log", "a", encoding='utf-8')
+        logger_file.write(formatted_message + '\n')
         logger_file.close()
 
     return True
 
 def loggerMapClicked():
   logger('🗺️ Clicado no botão novo mapa!')
-  logger_file = open('./log/new-map.log', 'a', encoding='utf-8')
-  logger_file.write(f'{date_formatted()}\n')
+  logger_file = open("./log/new-map.log", "a", encoding='utf-8')
+  logger_file.write(date_formatted() + '\n')
   logger_file.close()

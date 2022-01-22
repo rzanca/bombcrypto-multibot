@@ -21,3 +21,4 @@ __pycache__/
 log/logger.log
 /venv/
 /log/
+/source/
