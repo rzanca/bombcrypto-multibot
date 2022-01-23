@@ -318,12 +318,11 @@ def login():
     if clickbtn(images['connect-wallet'], timeout=10):
         logger('🎉 Botão de conexão da carteira encontrado, logando!')
         login_attempts = login_attempts + 1
-        clickbtn(images['select-wallet-2'], timeout=8)
-        time.sleep(10)
-        refreshheroes()
-        if clickbtn(images['treasure-hunt-icon'], timeout=15):
+        if clickbtn(images['select-wallet-2'], timeout=8):
+            time.sleep(10)
+            refreshheroes()
             login_attempts = 0
-        return
+            return
 
     if login_attempts > 3:
         logger('🔃 Muitas tentativas de login, atualizando')
