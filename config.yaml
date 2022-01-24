@@ -32,6 +32,10 @@
     # Valor padrão (em minutos): 60
     get_balance: 60
 
+    send_screenshot: 15
+
+    refresh_page: 30
+
   # O quão confiante o Bot. precisa estar para clicar nos botões (valores entre 0 e 1. Onde 0 é o valor mínimo, 1 é o valor máximo)
   threshold:
     # Valor padrão: 0.7

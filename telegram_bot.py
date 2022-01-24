@@ -5,7 +5,15 @@ from configuration import Configuration
 
 class Telegram:
 
-  def __init__(self, login_method: None, search_for_workable_heroes: None, refresh_heroes_positions_method: None, balance_method: None):
+  def __init__(self, 
+    login_method: None, 
+    search_for_workable_heroes: None, 
+    refresh_heroes_positions_method: None, 
+    balance_method: None, 
+    send_screenshot_method = None, 
+    refresh_page_method = None,
+    send_execution_infos_method = None
+  ):
     self.active = Configuration.telegram['active']
     if self.active:
       self.token = Configuration.telegram['token']
@@ -14,6 +22,9 @@ class Telegram:
       self.search_for_workable_heroes = search_for_workable_heroes
       self.refresh_heroes_positions_method = refresh_heroes_positions_method
       self.balance_method = balance_method
+      self.send_screenshot_method = send_screenshot_method
+      self.refresh_page_method = refresh_page_method
+      self.send_execution_infos_method = send_execution_infos_method
 
       if int(len(self.token)) > 10 and int(len(self.chatid) >=5):
         self.bot = self.criar_bot_telegram()
@@ -34,8 +45,11 @@ class Telegram:
     buttons = [
       [KeyboardButton("Login")], 
       [KeyboardButton("Send Heroes To Work")],
-      [KeyboardButton("Refresh Heroes Positions")],
-      [KeyboardButton("Balance")]
+      [KeyboardButton("Refresh Positions")],
+      [KeyboardButton("Balance")],
+      [KeyboardButton("Get Screenshot")],
+      [KeyboardButton("CTRL + F5")],
+      [KeyboardButton("Executions Infos")]
     ]
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bem vindo!", reply_markup=ReplyKeyboardMarkup(buttons))
@@ -43,12 +57,18 @@ class Telegram:
   def message_handler(self, update: Update, context: CallbackContext):
     if "Login" in update.message.text:
       self.login_method(True)
-    elif "Send Heroes To Work" in update.message.text:
+    elif "Send To Work" in update.message.text:
       self.search_for_workable_heroes(True)
-    elif "Refresh Heroes Positions" in update.message.text:
+    elif "Refresh Positions" in update.message.text:
       self.search_for_workable_heroes(True)
     elif "Balance" in update.message.text:
       self.balance_method(True)
+    elif "Get Screenshot" in update.message.text:
+      self.send_screenshot_method(True)
+    elif "CTRL + F5" in update.message.text:
+      self.refresh_page_method(True)
+    elif "Executions Infos" in update.message.text:
+      self.send_execution_infos_method()
 
   def criar_bot_telegram(self):
     return telegram.Bot(token=self.token)

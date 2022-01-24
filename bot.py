@@ -18,7 +18,15 @@ class Bot:
     self.images = self.load_images()
     self.windows = self.load_windows()
 
-    self.telegram = Telegram(self.login, self.search_for_workable_heroes, self.refresh_heroes_positions, self.go_balance)
+    self.telegram = Telegram(
+      self.login, 
+      self.search_for_workable_heroes, 
+      self.refresh_heroes_positions, 
+      self.go_balance, 
+      self.send_screenshot, 
+      self.refresh_page, 
+      self.send_executions_infos
+    )
     self.hero_clicks = 0
     self.login_attempts = 0
     self.last_log_is_progress = False
@@ -38,6 +46,7 @@ class Bot:
 
   def load_windows(self):
     windows = []
+    t = Configuration.c['time_intervals']
     for window in ScreenControls.getWindowsWithTitle():
       if window.title.count('bombcrypto-multibot') >= 1:
           continue
@@ -48,7 +57,10 @@ class Bot:
         'heroes': 0,
         'balance': 0,
         'new_map': 0,
-        'refresh_heroes': 0
+        'refresh_heroes': 0,
+        'send_screenshot': t['send_screenshot'] * 60,
+        'refresh_page': t['refresh_page'] * 60,
+        'maps': []
       })
 
     return windows
@@ -76,7 +88,7 @@ class Bot:
   def click_on_full_bar(self):
     return ScreenControls.positions(self.images['full-stamina'], threshold=Configuration.threshold['default'])
 
-  def click_on_treasure_hunt(self, timeout=None):
+  def click_on_treasure_hunt(self, timeout=3):
     return ScreenControls.clickbtn(self.images['treasure-hunt-icon'], timeout=timeout)
 
   def click_on_x(self):
@@ -115,7 +127,7 @@ class Bot:
 
   def login(self, update_last_execute = False):
     if update_last_execute:
-      self.telegram.telsendtext('O bot irá logar aguarde!')
+      self.telegram.telsendtext('O bot irá logar, aguarde!')
       for currentWindow in self.windows:
         currentWindow['login'] = 0
       
@@ -135,7 +147,7 @@ class Bot:
 
     if ScreenControls.clickbtn(self.images['select-wallet-2'], timeout=8):
       self.login_attempts = self.login_attempts + 1
-      time.sleep(10)
+      time.sleep(15)
       self.search_for_workable_heroes()
       if self.click_on_treasure_hunt(timeout=15):
         self.login_attempts = 0
@@ -148,7 +160,7 @@ class Bot:
 
   def go_balance(self, update_last_execute = False, curwind = ''):
     if update_last_execute:
-      self.telegram.telsendtext('O bot irá consultar seu saldo aguarde!')
+      self.telegram.telsendtext('O bot irá consultar seu saldo, aguarde!')
       for currentWindow in self.windows:
         currentWindow['balance'] = 0
       
@@ -187,6 +199,57 @@ class Bot:
     self.telegram.telsendphoto(img_dir)
     self.click_on_x()
     time.sleep(4)
+  
+  def send_screenshot(self, update_last_execute = False):
+    if update_last_execute:
+      self.telegram.telsendtext('O bot irá tirar screenshot das suas telas, aguarde!')
+      for currentWindow in self.windows:
+        currentWindow['send_screenshot'] = 0
+      
+      return
+
+    myscreen = AutoUI.pyautogui.screenshot()
+    img_dir = os.path.dirname(os.path.realpath(__file__)) + r'\targets\allscreens.png'
+    myscreen.save(img_dir)
+    time.sleep(4)
+    self.telegram.telsendtext('Aqui vai como está sua tela!')
+    self.telegram.telsendphoto(img_dir)
+    time.sleep(4)
+
+  def refresh_page(self, update_last_execute = False):
+    self.telegram.telsendtext('O bot irá atualizar a página e tentará logar novamente, aguarde!')
+    for currentWindow in self.windows:
+      currentWindow['refresh_page'] = 0
+      currentWindow['login'] = 0
+      currentWindow['window'].activate()
+      AutoUI.pyautogui.hotkey('ctrl', 'f5')
+      time.sleep(15)
+
+
+  def send_executions_infos(self):
+    for currentWindow in self.windows:
+      title = currentWindow['window'].title
+      print(currentWindow['login'])
+      login = '' if currentWindow['login'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['login'])))
+      heroes = '' if currentWindow['heroes'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['heroes'])))
+      balance = '' if currentWindow['balance'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['balance'])))
+      new_map ='' if currentWindow['new_map'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['new_map'])))
+      refresh_heroes ='' if currentWindow['refresh_heroes'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['refresh_heroes'])))
+      send_screenshot ='' if currentWindow['send_screenshot'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['send_screenshot'])))
+      refresh_page ='' if currentWindow['refresh_page'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['refresh_page'])))
+      texto = f'''
+        window: {title}
+        login: {login}
+        heroes: {heroes}
+        balance: {balance}
+        new_map: {new_map}
+        refresh_heroes: {refresh_heroes}
+        send_screenshot: {send_screenshot}
+        refresh_page: {refresh_page}
+      '''
+
+      self.telegram.telsendtext(texto)
+
   #region Painel Herói
 
   def scroll(self):
@@ -346,6 +409,7 @@ class Bot:
 
           if now - currentWindow['new_map'] > t['check_for_new_map_button']:
             currentWindow['new_map'] = now
+            currentWindow['maps'].append(now)
 
             if ScreenControls.clickbtn(self.images['new-map']):
               self.telegram.telsendtext(f'Completamos mais um mapa em %s' % currentWindow['window'].title)
@@ -365,7 +429,10 @@ class Bot:
           if now - currentWindow['balance'] > self.add_randomness(t['get_balance'] * 60):
             currentWindow['balance'] = now
             self.go_balance(False, currentWindow['window'].title)
-            break
+
+          if now - currentWindow['send_screenshot'] > self.add_randomness(t['send_screenshot'] * 60):
+            currentWindow['send_screenshot'] = now
+            self.send_screenshot(False)
 
           logger(None, progress_indicator=True)
 
