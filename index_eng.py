@@ -314,10 +314,10 @@ def refreshheroespositions():
 def login():
     global login_attempts
     logger('😿 Checking if the game has disconnected')
-    if clickbtn(images['connect-wallet'], timeout=10):
+    if clickbtn(images['connect-wallet'], timeout=15):
         logger('🎉 Wallet connection button found, logging in!')
         login_attempts = login_attempts + 1
-        if clickbtn(images['select-wallet-2'], timeout=8):
+        if clickbtn(images['select-wallet-2'], timeout=15):
             time.sleep(10)
             refreshheroes()
             login_attempts = 0
