@@ -1,4 +1,4 @@
-# BOT - MultiContas para BombCrypto - v 0.4.1
+# BOT - MultiContas para BombCrypto - v 0.4.2
 
 ## Funções extras:
 - Envios de notificações via Telegram:
@@ -13,6 +13,7 @@
     - All = Envia todos os heróis pelo novo botão
 - Todos os tempos de execução podem ser configurados
 - Atualiza a página conforme tempo definido
+- Atualização automática com backup dos arquivos de configuração
 
 ## Tutorial de Instalação
 
@@ -22,7 +23,7 @@ Se você baixar pelo site é importante marcar a opção para adicionar o
 python ao PATH:
 ![Check Add python to PATH](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/path.png?raw=true)
 
-### Realize o download do código no formato zip, e extraia o arquivo.
+### Realize o download do código no formato zip, e extraia o arquivo na pasta C:/.
 
 ![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
 
@@ -84,6 +85,7 @@ Apenas execute o arquivo IniciarBOT
 ### Ampliação do Navegador: 100%
 ### Escala do Monitor: 100%
 ### Necessário manter o jogo maximizado
+### O Bot deve estar na pasta C:/bombcrypto-multibot-main
 
 ## Curtiu? Faça sua doação... Wallet BEP20
 ### 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894

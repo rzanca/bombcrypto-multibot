@@ -16,24 +16,25 @@ import telegram
 import os
 import pygetwindow
 
-with open('./config.yaml','r',encoding='utf-8') as open_yml:
+with open('./config.yaml', 'r', encoding='utf-8') as open_yml:
     c = yaml.safe_load(open_yml)
+with open('./telegram.yaml', 'r', encoding='utf-8') as teleg:
+    tn = yaml.safe_load(teleg)
 ct = c['threshold']
 ch = c['home']
-cn = c['telegram_log']
 pyautogui.PAUSE = c['time_intervals']['interval_between_movements']
 pyautogui.FAILSAFE = False
 hc = HumanClicker()
 pyautogui.MINIMUM_DURATION = 0.1
 pyautogui.MINIMUM_SLEEP = 0.1
 pyautogui.PAUSE = 2
-telegram_notify = cn['active']
+telegram_notify = tn['active']
 saldo_atual = 0.0
 
 if telegram_notify is True:
-    if int(len(cn['token'])) > 10 and int(len(cn['chatid']) >=5 ):
-        bot = telegram.Bot(token=cn['token'])
-        tchat = cn['chatid']
+    if int(len(tn['token'])) > 10 and int(len(tn['chatid']) >= 5):
+        bot = telegram.Bot(token=tn['token'])
+        tchat = tn['chatid']
         print('>>---> Notificações no Telegram habilitadas.\n')
     else:
         print('>>---> Erro na configuração do Telegram, notificações desabilitadas.\n')
@@ -49,7 +50,7 @@ def telsendtext(bot_message, num_try=0):
         return bot.send_message(chat_id=tchat, text=bot_message)
     except:
         if num_try == 1:
-            bot = telegram.Bot(token=cn['token'])
+            bot = telegram.Bot(token=tn['token'])
             return telsendtext(bot_message, 1)
         return 0
 
@@ -60,13 +61,13 @@ def telsendphoto(photo_path, num_try=0):
         return bot.send_photo(chat_id=tchat, photo=open(photo_path, 'rb'))
     except:
         if num_try == 1:
-            bot = telegram.Bot(token=cn['token'])
+            bot = telegram.Bot(token=tn['token'])
             return telsendphoto(photo_path, 1)
         return 0
 
 
 cat = '''
->>---> BOT - MultiContas para BombCrypto - v 0.4.1 
+>>---> BOT - MultiContas para BombCrypto - v 0.4.2 
 
 >>---> https://github.com/rzanca/bombcrypto-multibot/
 

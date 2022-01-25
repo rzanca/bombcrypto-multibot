@@ -1,4 +1,4 @@
-# BOT - MultiAccount for BombCrypto - v 0.4.1
+# BOT - MultiAccount for BombCrypto - v 0.4.2
 
 ## Extra functions:
 - Sending notifications via Telegram:
@@ -13,6 +13,7 @@
   - All = Send all heroes by new button
 - All runtimes can be configured
 - Refresh the page as set time
+- Automatic update with backup of configuration files
 
 ## Installation Tutorial
 
@@ -22,7 +23,7 @@ If you download from the website, it is important to check the option to add the
 python to the PATH:
 ![Check Add python to PATH](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/path.png?raw=true)
 
-### Download the code in zip format, and extract the file.
+### Download the code in zip format, and extract the file in the C:/ folder.
 
 ![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
 
@@ -84,6 +85,7 @@ Just run the IniciarBOT file
 ### Browser Zoom: 100%
 ### Monitor Scale: 100%
 ### Need to keep the game maximized
+### Bot must be in C:/bombcrypto-multibot-main folder
 
 ## Did you like it? make your donation... Wallet BEP20
 ### 0xc11ed49D4c8cAe4EBdE49091c90543b17079d894

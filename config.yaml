@@ -1,10 +1,5 @@
 ---
-  # Configurações de conexão para Telegram
-  telegram_log:
-    active: True
-    token: 'token'
-    chatid: 'chat'
-    
+
   # Configurações de intervalos de tempo
   time_intervals:
     
