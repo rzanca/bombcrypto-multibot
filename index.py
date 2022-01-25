@@ -9,10 +9,9 @@ def start_bot():
         try:
             if bot is not None and bot.telegram is not None:
                 bot.telegram.telsendtext('Ocorreu um erro no bot. Bot sendo reiniciado!')
+            start_bot()
         except:
             start_bot()
-            
-        start_bot()
 
 if __name__ == '__main__':
     start_bot()
