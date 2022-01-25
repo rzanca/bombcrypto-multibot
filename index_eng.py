@@ -66,7 +66,7 @@ def telsendphoto(photo_path, num_try=0):
 
 
 cat = '''
->>---> BOT - MultiAccounts for BombCrypto - v 0.4.1 
+>>---> BOT - MultiAccounts for BombCrypto - v 0.4.2 
 
 >>---> https://github.com/rzanca/bombcrypto-multibot/
 
