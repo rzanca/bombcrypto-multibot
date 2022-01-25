@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-    
 from bot import Bot
 
-if __name__ == '__main__':
+def start_bot():
     bot = Bot()
-    bot.start()
+    try:
+        bot.start()
+    except:
+        try:
+            if bot is not None and bot.telegram is not None:
+                bot.telegram.telsendtext('Ocorreu um erro no bot. Bot sendo reiniciado!')
+        except:
+            start_bot()
+            
+        start_bot()
+
+if __name__ == '__main__':
+    start_bot()
