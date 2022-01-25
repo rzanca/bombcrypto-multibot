@@ -411,7 +411,7 @@ def refreshheroes():
 
 def gobalance():
     logger('Checking your balance')
-    time.sleep(2)
+    time.sleep(5)
     global saldo_atual
     clickbtn(images['consultar-saldo'])
     i = 10
