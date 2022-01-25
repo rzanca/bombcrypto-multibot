@@ -21,37 +21,37 @@
 
 If you download from the website, it is important to check the option to add the
 python to the PATH:
-![Check Add python to PATH](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/path.png?raw=true)
+![Check Add python to PATH](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/path.png)
 
 ### Download the code in zip format, and extract the file in the C:/ folder.
 
-![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png?raw=true)
+![zipcode](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/download.png)
 
 ### Install the BOT
 
-![instalar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/instalar.png?raw=true)
+![instalar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/instalar.png)
 
 ### Configuring Telegram
 
 Open your Telegram by mobile or web.
 Search @BotFather
 
-![bot-father](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/botfather.png?raw=true)
+![bot-father](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/botfather.png)
 
 Type the command /start
 after that, click or type the command /newbot
 
-![tb](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegrambot.png?raw=true)
+![tb](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegrambot.png)
 
 
 Choose a name for your Bot. After that choose a username for it, the end must contain the word Bot.
 Save the API Token for future use
 
-![token](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/token.png?raw=true)
+![token](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/token.png)
 
 Search for your bot's user and send the command /start
 
-![meu-bot](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png?raw=true)
+![meu-bot](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/meubot.png)
 
 In the browser, access the link below, don't forget to include your api token after the word Bot.
 
@@ -59,22 +59,22 @@ https://api.telegram.org/bot/getupdates
 
 After that, write down the chat id as shown in the image below.
 
-![link](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png?raw=true)
+![link](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png)
 
 Open the telegram.yaml file in Notepad or another editor
 
-![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png?raw=true)
+![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config2.png)
 
 Modify the token and chat id fields with the previously saved values.
 Save the file.
 
-![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog.png?raw=true)
+![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog2.png)
 
 ### Starting Bot
 
 Just run the IniciarBOT file
 
-![iniciar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png?raw=true)
+![iniciar](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/iniciar.png)
 
 ### Some settings can be changed in the config.yaml file, don't forget to restart the Bot. if you change the settings.
 

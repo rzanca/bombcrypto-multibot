@@ -63,12 +63,12 @@ Após isso, anote o chat id conforme a imagem abaixo.
 
 Abra o arquivo telegram.yaml pelo bloco de notas ou outro editor
 
-![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png)
+![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config2.png)
 
 Modifique os campos token e chat id com os valores salvos anteriormente. 
 Salve o arquivo.
 
-![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog.png)
+![log](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/telegramlog2.png)
 
 ### Iniciando o Bot
 
