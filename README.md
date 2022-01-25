@@ -61,7 +61,7 @@ Após isso, anote o chat id conforme a imagem abaixo.
 
 ![link](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/chatid.png?raw=true)
 
-Abra o arquivo config.yaml pelo bloco de notas ou outro editor
+Abra o arquivo telegram.yaml pelo bloco de notas ou outro editor
 
 ![config](https://github.com/rzanca/bombcrypto-multibot/blob/main/readme-images/config.png?raw=true)
 

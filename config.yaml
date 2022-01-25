@@ -29,7 +29,7 @@
 
     # Intervalo de tempo para atualizar a página
     # Valor padrão (em minutos): 30
-    check_for_refresh_page: 30
+    check_for_refresh_page: 90
 
   # O quão confiante o Bot. precisa estar para clicar nos botões (valores entre 0 e 1. Onde 0 é o valor mínimo, 1 é o valor máximo)
   threshold:
