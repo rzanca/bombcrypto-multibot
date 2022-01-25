@@ -1,0 +1,4 @@
+  # Configurações de conexão para Telegram
+ active: True
+ token: 'token'
+ chatid: 'chat'
