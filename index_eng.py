@@ -318,7 +318,8 @@ def login():
     if clickbtn(images['connect-wallet'], timeout=15):
         logger('🎉 Wallet connection button found, logging in!')
         login_attempts = login_attempts + 1
-        if clickbtn(images['select-wallet-2'], timeout=15):
+        time.sleep(3)
+        if clickbtn(images['select-wallet-2'], timeout=25):
             time.sleep(10)
             refreshheroes()
             login_attempts = 0
