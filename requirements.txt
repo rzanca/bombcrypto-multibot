@@ -96,8 +96,6 @@ pyscreeze==0.1.28 \
 python-telegram-bot==13.10; python_version >= "3.6" \
     --hash=sha256:d2c555431821f4ace0c1b7ce12af41999f01b793b275dee131f1034d08c01e3e \
     --hash=sha256:833f39110f5d019b39a6c6fcbabd6ea1627eaaa0a26e618c0be099568672d791
-python3-xlib==0.15; platform_system == "Linux" and python_version >= "3.0" \
-    --hash=sha256:dc4245f3ae4aa5949c1d112ee4723901ade37a96721ba9645f2bfa56e5b383f8
 pytweening==1.0.4 \
     --hash=sha256:8533282cf70b31de8a0499e1cf420930b0013c787118872b2ec899382792e2e6
 pytz-deprecation-shim==0.1.0.post0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6" \
@@ -140,9 +138,6 @@ pyyaml==6.0; python_version >= "3.6" \
     --hash=sha256:b5b9eccad747aabaaffbc6064800670f0c297e52c12754eb1d976c57e4f74dcb \
     --hash=sha256:b3d267842bf12586ba6c734f89d1f5b871df0273157918b0ccefa29deb05c21c \
     --hash=sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2
-rubicon-objc==0.4.2; python_version >= "3.5" and platform_system == "Darwin" \
-    --hash=sha256:6fbc8e12bd66c84427cfb95634c4bd10ade356ae2b2ae0d2b51dcbf5810d2602 \
-    --hash=sha256:c8780b9d6c3c906642080a9f8b710f5823a498c17e9bbea7f70781ea6ede7962
 six==1.16.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.6" \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926
