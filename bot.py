@@ -145,6 +145,14 @@ class Bot:
       logger('🎉 Botão de conexão da carteira encontrado, logando!')
       self.login_attempts = self.login_attempts + 1
 
+    time.sleep(5)
+
+    if ScreenControls.clickbtn(self.images['connect-metamask'], timeout=10):
+      logger('🎉 Botão de conexão da carteira encontrado, logando!')
+      self.login_attempts = self.login_attempts + 1
+
+    time.sleep(10)
+
     if ScreenControls.clickbtn(self.images['select-wallet-2'], timeout=8):
       self.login_attempts = self.login_attempts + 1
       time.sleep(15)
