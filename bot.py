@@ -4,6 +4,7 @@ import os
 from cv2 import cv2
 from os import listdir
 from random import random, randint
+from datetime import datetime
 
 from src.logger import logger, loggerMapClicked
 from configuration import Configuration
@@ -25,11 +26,14 @@ class Bot:
       self.go_balance, 
       self.send_screenshot, 
       self.refresh_page, 
-      self.send_executions_infos
+      self.send_executions_infos,
+      self.rest_all
     )
     self.hero_clicks = 0
     self.login_attempts = 0
     self.last_log_is_progress = False
+
+  #region Configs
 
   def remove_suffix(self, input_string, suffix):
     if suffix and input_string.endswith(suffix):
@@ -77,6 +81,8 @@ class Bot:
     randomized_n = int(without_average_random_factor + random_factor)
     return int(randomized_n)
 
+  #endregion
+
   #region Click de Botões
 
   def click_on_go_work(self):
@@ -103,8 +109,149 @@ class Bot:
   def click_on_send_all(self):
     return ScreenControls.positions(self.images['send-all'], threshold=Configuration.threshold['go_to_work_btn'])
 
+  def click_on_rest_all(self):
+    return ScreenControls.positions(self.images['rest-all'], threshold=Configuration.threshold['go_to_work_btn'])
+
   def click_on_balance(self):
     ScreenControls.clickbtn(self.images['consultar-saldo'])
+    
+  #endregion
+
+  #region Painel Herói
+
+  def scroll(self):
+    hero_item_list = ScreenControls.positions(self.images['hero-item'], threshold=Configuration.threshold['common'])
+    if len(hero_item_list) == 0:
+        return
+    x, y, w, h = hero_item_list[len(hero_item_list) - 1]
+    ScreenControls.movetowithrandomness(x, y, 1)
+
+    if not Configuration.c['use_click_and_drag_instead_of_scroll']:
+        AutoUI.pyautogui.scroll(-Configuration.c['scroll_size'])
+    else:
+        AutoUI.pyautogui.dragRel(0, -Configuration.c['click_and_drag_amount'], 1, button='left')
+
+  def rest_all(self):
+    logger('⚒️ Colocando os heróis para dormir (seus vagabundos)', 'green')
+    self.go_to_heroes()
+    time.sleep(10)
+    self.click_on_rest_all()
+    time.sleep(10)
+    self.go_to_treasure_hunt()
+    
+  def is_working(self, bar, buttons):
+    y = bar[1]
+
+    for (_, button_y, _, button_h) in buttons:
+      isbelow = y < (button_y + button_h)
+      isabove = y > (button_y - button_h)
+      if isbelow and isabove:
+        return False
+    return True
+
+  def send_all(self):
+    buttons = self.click_on_send_all()
+    for (x, y, w, h) in buttons:
+      ScreenControls.movetowithrandomness(x + (w / 2), y + (h / 2), 1)
+      AutoUI.pyautogui.click()
+
+  def send_green_bar_heroes_to_work(self):
+    offset = 140
+
+    green_bars = self.click_on_green_bar()
+    logger('🟩 %d Barras verdes detectadas' % len(green_bars))
+    buttons = self.click_on_go_work()
+    logger('🆗 %d Botoes detectados' % len(buttons))
+
+    not_working_green_bars = []
+    for bar in green_bars:
+      if not self.is_working(bar, buttons):
+        not_working_green_bars.append(bar)
+    if len(not_working_green_bars) > 0:
+      logger('🆗 %d Botoes com barra verde detectados' % len(not_working_green_bars))
+      logger('👆 Clicando em %d heróis' % len(not_working_green_bars))
+
+    hero_clicks_cnt = 0
+    for (x, y, w, h) in not_working_green_bars:
+      ScreenControls.movetowithrandomness(x + offset + (w / 2), y + (h / 2), 1)
+      AutoUI.pyautogui.click()
+      self.hero_clicks = self.hero_clicks + 1
+      hero_clicks_cnt = hero_clicks_cnt + 1
+      if hero_clicks_cnt > 20:
+        logger('⚠️ Houve muitos cliques em heróis, tente aumentar o go_to_work_btn threshold')
+        return
+    return len(not_working_green_bars)
+
+  def send_full_bar_heroes_to_work(self):
+    offset = 100
+    full_bars = self.click_on_full_bar()
+    buttons = self.click_on_go_work()
+
+    not_working_full_bars = []
+    for bar in full_bars:
+      if not self.is_working(bar, buttons):
+        not_working_full_bars.append(bar)
+
+    if len(not_working_full_bars) > 0:
+      logger('👆 Clicando em %d heróis' % len(not_working_full_bars))
+
+    for (x, y, w, h) in not_working_full_bars:
+      ScreenControls.movetowithrandomness(x + offset + (w / 2), y + (h / 2), 1)
+      AutoUI.pyautogui.click()
+      self.hero_clicks = self.hero_clicks + 1
+
+    return len(not_working_full_bars)
+
+  def send_heroes_to_work(self):
+    if Configuration.c['select_heroes_mode'] == 'full':
+      return self.send_full_bar_heroes_to_work()
+    elif Configuration.c['select_heroes_mode'] == 'green':
+      return self.send_green_bar_heroes_to_work()
+    else:
+      return self.send_all()
+
+  def go_to_heroes(self):
+    if self.click_on_go_back():
+      self.login_attempts = 0
+
+    time.sleep(3)
+    self.click_on_heroes()
+    time.sleep(3)
+
+  def search_for_workable_heroes(self, update_last_execute = False):
+    if update_last_execute:
+      self.telegram.telsendtext('O bot irá colocar os bonecos para trabalhar!')
+      for currentWindow in self.windows:
+        currentWindow['heroes'] = 0
+
+      return
+    
+    self.go_to_heroes()
+
+    if Configuration.c['select_heroes_mode'] == 'full':
+      logger('⚒️ Enviando heróis com a energia cheia para o trabalho', 'green')
+    elif Configuration.c['select_heroes_mode'] == 'green':
+      logger('⚒️ Enviando heróis com a energia verde para o trabalho', 'green')
+    else:
+      logger('⚒️ Enviando todos heróis para o trabalho', 'green')
+
+    empty_scrolls_attempts = Configuration.c['scroll_attempts']
+
+    if Configuration.c['select_heroes_mode'] == 'all':
+      time.sleep(4)
+      self.send_all()
+      logger('💪 ALL heroes sent to work')
+      time.sleep(4)
+    else:
+      while empty_scrolls_attempts > 0:
+        self.send_heroes_to_work()
+        empty_scrolls_attempts = empty_scrolls_attempts - 1
+        self.scroll()
+        time.sleep(2)
+      logger('💪 {} Heróis enviados para o trabalho'.format(self.hero_clicks))
+
+    self.go_to_treasure_hunt()
+
   #endregion
 
   def go_to_treasure_hunt(self):
@@ -233,7 +380,6 @@ class Bot:
       AutoUI.pyautogui.hotkey('ctrl', 'f5')
       time.sleep(15)
 
-
   def send_executions_infos(self):
     for currentWindow in self.windows:
       title = currentWindow['window'].title
@@ -257,135 +403,6 @@ class Bot:
       '''
 
       self.telegram.telsendtext(texto)
-
-  #region Painel Herói
-
-  def scroll(self):
-    hero_item_list = ScreenControls.positions(self.images['hero-item'], threshold=Configuration.threshold['common'])
-    if len(hero_item_list) == 0:
-        return
-    x, y, w, h = hero_item_list[len(hero_item_list) - 1]
-    ScreenControls.movetowithrandomness(x, y, 1)
-
-    if not Configuration.c['use_click_and_drag_instead_of_scroll']:
-        AutoUI.pyautogui.scroll(-Configuration.c['scroll_size'])
-    else:
-        AutoUI.pyautogui.dragRel(0, -Configuration.c['click_and_drag_amount'], 1, button='left')
-
-  def is_working(self, bar, buttons):
-    y = bar[1]
-
-    for (_, button_y, _, button_h) in buttons:
-      isbelow = y < (button_y + button_h)
-      isabove = y > (button_y - button_h)
-      if isbelow and isabove:
-        return False
-    return True
-
-  def send_all(self):
-    buttons = self.click_on_send_all()
-    for (x, y, w, h) in buttons:
-      ScreenControls.movetowithrandomness(x + (w / 2), y + (h / 2), 1)
-      AutoUI.pyautogui.click()
-
-  def send_green_bar_heroes_to_work(self):
-    offset = 140
-
-    green_bars = self.click_on_green_bar()
-    logger('🟩 %d Barras verdes detectadas' % len(green_bars))
-    buttons = self.click_on_go_work()
-    logger('🆗 %d Botoes detectados' % len(buttons))
-
-    not_working_green_bars = []
-    for bar in green_bars:
-      if not self.is_working(bar, buttons):
-        not_working_green_bars.append(bar)
-    if len(not_working_green_bars) > 0:
-      logger('🆗 %d Botoes com barra verde detectados' % len(not_working_green_bars))
-      logger('👆 Clicando em %d heróis' % len(not_working_green_bars))
-
-    hero_clicks_cnt = 0
-    for (x, y, w, h) in not_working_green_bars:
-      ScreenControls.movetowithrandomness(x + offset + (w / 2), y + (h / 2), 1)
-      AutoUI.pyautogui.click()
-      self.hero_clicks = self.hero_clicks + 1
-      hero_clicks_cnt = hero_clicks_cnt + 1
-      if hero_clicks_cnt > 20:
-        logger('⚠️ Houve muitos cliques em heróis, tente aumentar o go_to_work_btn threshold')
-        return
-    return len(not_working_green_bars)
-
-  def send_full_bar_heroes_to_work(self):
-    offset = 100
-    full_bars = self.click_on_full_bar()
-    buttons = self.click_on_go_work()
-
-    not_working_full_bars = []
-    for bar in full_bars:
-      if not self.is_working(bar, buttons):
-        not_working_full_bars.append(bar)
-
-    if len(not_working_full_bars) > 0:
-      logger('👆 Clicando em %d heróis' % len(not_working_full_bars))
-
-    for (x, y, w, h) in not_working_full_bars:
-      ScreenControls.movetowithrandomness(x + offset + (w / 2), y + (h / 2), 1)
-      AutoUI.pyautogui.click()
-      self.hero_clicks = self.hero_clicks + 1
-
-    return len(not_working_full_bars)
-
-  def send_heroes_to_work(self):
-    if Configuration.c['select_heroes_mode'] == 'full':
-      return self.send_full_bar_heroes_to_work()
-    elif Configuration.c['select_heroes_mode'] == 'green':
-      return self.send_green_bar_heroes_to_work()
-    else:
-      return self.send_all()
-
-  def go_to_heroes(self):
-    if self.click_on_go_back():
-      self.login_attempts = 0
-
-    time.sleep(3)
-    self.click_on_heroes()
-    time.sleep(3)
-
-  def search_for_workable_heroes(self, update_last_execute = False):
-    if update_last_execute:
-      self.telegram.telsendtext('O bot irá colocar os bonecos para trabalhar!')
-      for currentWindow in self.windows:
-        currentWindow['heroes'] = 0
-
-      return
-    
-    self.go_to_heroes()
-
-    if Configuration.c['select_heroes_mode'] == 'full':
-      logger('⚒️ Enviando heróis com a energia cheia para o trabalho', 'green')
-    elif Configuration.c['select_heroes_mode'] == 'green':
-      logger('⚒️ Enviando heróis com a energia verde para o trabalho', 'green')
-    else:
-      logger('⚒️ Enviando todos heróis para o trabalho', 'green')
-
-    empty_scrolls_attempts = Configuration.c['scroll_attempts']
-
-    if Configuration.c['select_heroes_mode'] == 'all':
-      time.sleep(4)
-      self.send_all()
-      logger('💪 ALL heroes sent to work')
-      time.sleep(4)
-    else:
-      while empty_scrolls_attempts > 0:
-        self.send_heroes_to_work()
-        empty_scrolls_attempts = empty_scrolls_attempts - 1
-        self.scroll()
-        time.sleep(2)
-      logger('💪 {} Heróis enviados para o trabalho'.format(self.hero_clicks))
-
-    self.go_to_treasure_hunt()
-
-  #endregion
 
   def start(self):
     print(instruction)
