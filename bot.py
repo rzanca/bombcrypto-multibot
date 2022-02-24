@@ -282,7 +282,7 @@ class Bot:
 
     logger('😿 Checando se o jogo se desconectou')
 
-    if self.login_attempts > 3:
+    if self.login_attempts > 4:
       logger('🔃 Muitas tentativas de login, atualizando')
       self.login_attempts = 0
       AutoUI.pyautogui.hotkey('ctrl', 'f5')
