@@ -41,11 +41,19 @@ login_with_pass:
   # Valor padrão: False
   activated: False
 
-  # Login
-  username: ""
-
-  # Senha
-  password: ""
+  # Multiaccounts
+  # Os valores devem ser crescentes de 1 até o número total das sua conta
+  # Inclua o usuário e senha de cada conta do jeito que está neste exemplo
+  accounts:
+    1:
+      username: "username"
+      password: "your_password"
+    2:
+      username: "another_username"
+      password: "another_password"
+    3:
+      username: "last_username"
+      password: "last_password"
 
 # O quão confiante o Bot. precisa estar para clicar nos botões (valores entre 0 e 1. Onde 0 é o valor mínimo, 1 é o valor máximo)
 threshold:
