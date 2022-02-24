@@ -1,6 +1,7 @@
 import time
 import sys
 import os
+import pyautogui
 from cv2 import cv2
 from os import listdir
 from random import random, randint
@@ -272,7 +273,10 @@ class Bot:
     time.sleep(2)
     self.click_on_treasure_hunt()
 
+  #login
+
   def login(self, update_last_execute = False):
+    l = Configuration.c['login_with_pass']
     if update_last_execute:
       self.telegram.telsendtext('O bot irá logar, aguarde!')
       for currentWindow in self.windows:
@@ -291,18 +295,39 @@ class Bot:
     if ScreenControls.clickbtn(self.images['connect-wallet'], timeout=10):
       logger('🎉 Botão de conexão da carteira encontrado, logando!')
       self.login_attempts = self.login_attempts + 1
-
     time.sleep(5)
 
-    if ScreenControls.clickbtn(self.images['connect-metamask'], timeout=10):
-      logger('🎉 Botão de conexão da carteira encontrado, logando!')
-      self.login_attempts = self.login_attempts + 1
+    #Login activated
+    if l["activated"] == True:
+      if ScreenControls.clickbtn(self.images['type-username'], timeout=10):
+        logger('⌨ Preenchendo campo de usuário!')
+      time.sleep(2)
 
-    time.sleep(10)
+      pyautogui.write(l["username"], interval=0.25)
+      time.sleep(2)
+
+      if ScreenControls.clickbtn(self.images['type-password'], timeout=10):
+        logger('⌨ Preenchendo campo de senha!')
+      time.sleep(2)
+
+      pyautogui.write(l["password"], interval=0.25)
+      time.sleep(2)
+
+      if ScreenControls.clickbtn(self.images['connect-login'], timeout=10):
+        logger('👌 Clicando no botão login!')
+      time.sleep(2)
+
+      self.login_attempts = self.login_attempts + 1
+    else:
+      if ScreenControls.clickbtn(self.images['connect-metamask'], timeout=10):
+        logger('👌 Botão de conexão pela metamask, clicado!')
+        self.login_attempts = self.login_attempts + 1
+      time.sleep(10)
 
     if ScreenControls.clickbtn(self.images['select-wallet-2'], timeout=8):
       self.login_attempts = self.login_attempts + 1
       time.sleep(15)
+
       self.search_for_workable_heroes()
       if self.click_on_treasure_hunt(timeout=15):
         self.login_attempts = 0
