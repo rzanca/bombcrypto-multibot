@@ -313,6 +313,9 @@ def login():
 
     if clickbtn(images['connect-wallet'], timeout=10):
         logger('🎉 Botão de conexão da carteira encontrado, logando!')
+        time.sleep(3)
+        clickbtn(images['login1'], timeout=8)
+        time.sleep(3)
         login_attempts = login_attempts + 1
 
     if clickbtn(images['select-wallet-2'], timeout=8):
@@ -507,9 +510,14 @@ def main():
                     loggerMapClicked()
                     time.sleep(3)
                     num_jaulas = len(positions(images['jail'], threshold=0.8))
+                    num_chest_key = len(positions(images['chest_key_closed'], threshold=0.8))
                     if num_jaulas > 0:
                         telsendtext(
                             f'Parabéns temos {num_jaulas} nova(s) jaula(s) no novo mapa 🎉🎉🎉 em %s' % currentWindow[
+                                'window'].title)
+                    if num_chest_key > 0:
+                        telsendtext(
+                            f'Parabéns temos {num_chest_key} nova(s) chave(s) no novo mapa 🗝️🗝️🗝️ em %s' % currentWindow[
                                 'window'].title)
 
                 if now - currentWindow['refresh_heroes'] > addrandomness(t['refresh_heroes_positions'] * 60):
