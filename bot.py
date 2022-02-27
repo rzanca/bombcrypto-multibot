@@ -32,6 +32,9 @@ class Bot:
     self.hero_clicks = 0
     self.login_attempts = 0
     self.last_log_is_progress = False
+    self.accounts = 0
+    self.activeaccount = 0
+    # self.accountslist = list(range(0, self.accounts)) 
 
   #region Configs
 
@@ -272,12 +275,13 @@ class Bot:
     time.sleep(2)
     self.click_on_treasure_hunt()
 
+  #login
+
   def login(self, update_last_execute = False):
     if update_last_execute:
       self.telegram.telsendtext('O bot irá logar, aguarde!')
       for currentWindow in self.windows:
         currentWindow['login'] = 0
-      
       return
 
     logger('😿 Checando se o jogo se desconectou')
@@ -291,18 +295,33 @@ class Bot:
     if ScreenControls.clickbtn(self.images['connect-wallet'], timeout=10):
       logger('🎉 Botão de conexão da carteira encontrado, logando!')
       self.login_attempts = self.login_attempts + 1
-
     time.sleep(5)
 
-    if ScreenControls.clickbtn(self.images['connect-metamask'], timeout=10):
-      logger('🎉 Botão de conexão da carteira encontrado, logando!')
-      self.login_attempts = self.login_attempts + 1
+    #Login activated
+    l = Configuration.c['login_with_pass']
+    if l["activated"] == True:
+      if ScreenControls.clickbtn(self.images['type-username'], timeout=10):
+        ScreenControls.inputtype(l["accounts"][self.activeaccount]["username"])
+        logger('⌨ Preenchendo campo de usuário!')
 
-    time.sleep(10)
+      if ScreenControls.clickbtn(self.images['type-password'], timeout=10):
+        ScreenControls.inputtype(l["accounts"][self.activeaccount]["password"])
+        logger('⌨ Preenchendo campo de senha!')
+      
+      if ScreenControls.clickbtn(self.images['connect-login'], timeout=10):
+        logger('👌 Clicando no botão login!')
+        self.login_attempts = self.login_attempts + 1
+        time.sleep(2)
+    else:
+      if ScreenControls.clickbtn(self.images['connect-metamask'], timeout=10):
+        logger('👌 Botão de conexão pela metamask, clicado!')
+        self.login_attempts = self.login_attempts + 1
+        time.sleep(10)
 
     if ScreenControls.clickbtn(self.images['select-wallet-2'], timeout=8):
       self.login_attempts = self.login_attempts + 1
       time.sleep(15)
+
       self.search_for_workable_heroes()
       if self.click_on_treasure_hunt(timeout=15):
         self.login_attempts = 0
@@ -410,6 +429,8 @@ class Bot:
     t = Configuration.c['time_intervals']
 
     if len(self.windows) >= 1:
+      self.accounts = len(self.windows)
+
       print('\n\n>>---> %d janelas com o nome Bombcrypto encontradas!' % len(self.windows))
       self.telegram.telsendtext('🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!' % len(self.windows))
 
@@ -422,6 +443,11 @@ class Bot:
             currentWindow['window'].maximize()
 
           print('\n\n>>---> Janela atual: %s' % currentWindow['window'].title)
+
+          if self.activeaccount == self.accounts:
+            self.activeaccount = 1
+          else:
+            self.activeaccount = self.activeaccount + 1
 
           if now - currentWindow['login'] > self.add_randomness(t['check_for_login'] * 60):
             sys.stdout.flush()

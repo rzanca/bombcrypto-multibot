@@ -2,8 +2,8 @@ import time
 import numpy as np
 import mss
 import pygetwindow
+import pyautogui
 from cv2 import cv2
-
 from src.logger import logger, loggerMapClicked
 from configuration import Configuration
 from autoui import AutoUI
@@ -65,3 +65,9 @@ class ScreenControls:
       ScreenControls.movetowithrandomness(pos_click_x, pos_click_y, 1)
       AutoUI.pyautogui.click()
       return True
+
+  @staticmethod
+  def inputtype(text):
+    time.sleep(2)
+    pyautogui.write(text, interval=0.3)
+    time.sleep(2)
