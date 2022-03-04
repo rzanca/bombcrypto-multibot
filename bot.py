@@ -32,9 +32,6 @@ class Bot:
     self.hero_clicks = 0
     self.login_attempts = 0
     self.last_log_is_progress = False
-    self.accounts = 0
-    self.activeaccount = 0
-    # self.accountslist = list(range(0, self.accounts)) 
 
   #region Configs
 
@@ -54,7 +51,7 @@ class Bot:
   def load_windows(self):
     windows = []
     t = Configuration.c['time_intervals']
-    for window in ScreenControls.getWindowsWithTitle():
+    for idx, window in enumerate(ScreenControls.getWindowsWithTitle()):
       if window.title.count('bombcrypto-multibot') >= 1:
           continue
 
@@ -67,7 +64,8 @@ class Bot:
         'refresh_heroes': 0,
         'send_screenshot': t['send_screenshot'] * 60,
         'refresh_page': t['refresh_page'] * 60,
-        'maps': []
+        'maps': [],
+        'account_idx': idx
       })
 
     return windows
@@ -277,7 +275,7 @@ class Bot:
 
   #login
 
-  def login(self, update_last_execute = False):
+  def login(self, update_last_execute = False, currentWindow = None):
     if update_last_execute:
       self.telegram.telsendtext('O bot irá logar, aguarde!')
       for currentWindow in self.windows:
@@ -300,12 +298,13 @@ class Bot:
     #Login activated
     l = Configuration.c['login_with_pass']
     if l["activated"] == True:
+      account_idx = currentWindow['account_idx']
       if ScreenControls.clickbtn(self.images['type-username'], timeout=10):
-        ScreenControls.inputtype(l["accounts"][self.activeaccount]["username"])
+        ScreenControls.inputtype(l["accounts"][account_idx]["username"])
         logger('⌨ Preenchendo campo de usuário!')
 
       if ScreenControls.clickbtn(self.images['type-password'], timeout=10):
-        ScreenControls.inputtype(l["accounts"][self.activeaccount]["password"])
+        ScreenControls.inputtype(l["accounts"][account_idx]["password"])
         logger('⌨ Preenchendo campo de senha!')
       
       if ScreenControls.clickbtn(self.images['connect-login'], timeout=10):
@@ -402,7 +401,6 @@ class Bot:
   def send_executions_infos(self):
     for currentWindow in self.windows:
       title = currentWindow['window'].title
-      print(currentWindow['login'])
       login = '' if currentWindow['login'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['login'])))
       heroes = '' if currentWindow['heroes'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['heroes'])))
       balance = '' if currentWindow['balance'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['balance'])))
@@ -410,6 +408,7 @@ class Bot:
       refresh_heroes ='' if currentWindow['refresh_heroes'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['refresh_heroes'])))
       send_screenshot ='' if currentWindow['send_screenshot'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['send_screenshot'])))
       refresh_page ='' if currentWindow['refresh_page'] == 0 else time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(int(currentWindow['refresh_page'])))
+      account_idx = str(currentWindow['account_idx'])
       texto = f'''
         window: {title}
         login: {login}
@@ -419,6 +418,7 @@ class Bot:
         refresh_heroes: {refresh_heroes}
         send_screenshot: {send_screenshot}
         refresh_page: {refresh_page}
+        account_idx: {account_idx}
       '''
 
       self.telegram.telsendtext(texto)
@@ -429,7 +429,6 @@ class Bot:
     t = Configuration.c['time_intervals']
 
     if len(self.windows) >= 1:
-      self.accounts = len(self.windows)
 
       print('\n\n>>---> %d janelas com o nome Bombcrypto encontradas!' % len(self.windows))
       self.telegram.telsendtext('🔌 Bot inicializado em %d Contas. \n\n 💰 É hora de faturar alguns BCoins!!!' % len(self.windows))
@@ -444,15 +443,10 @@ class Bot:
 
           print('\n\n>>---> Janela atual: %s' % currentWindow['window'].title)
 
-          if self.activeaccount == self.accounts:
-            self.activeaccount = 1
-          else:
-            self.activeaccount = self.activeaccount + 1
-
           if now - currentWindow['login'] > self.add_randomness(t['check_for_login'] * 60):
             sys.stdout.flush()
             currentWindow['login'] = now
-            self.login()
+            self.login(False, currentWindow)
 
           if now - currentWindow['heroes'] > self.add_randomness(t['send_heroes_for_work'] * 60):
             currentWindow['heroes'] = now
