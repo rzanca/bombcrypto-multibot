@@ -45,13 +45,13 @@ login_with_pass:
   # Os valores devem ser crescentes de 1 até o número total das sua conta
   # Inclua o usuário e senha de cada conta do jeito que está neste exemplo
   accounts:
-    1:
+    0:
       username: "username"
       password: "your_password"
-    2:
+    1:
       username: "another_username"
       password: "another_password"
-    3:
+    2:
       username: "last_username"
       password: "last_password"
 

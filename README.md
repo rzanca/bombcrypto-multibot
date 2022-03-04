@@ -1,5 +1,8 @@
 # BOT - MultiContas para BombCrypto - v 0.4.0
 
+ATENÇÃO:
+- Não utilize o bot junto de janelas com o nome Bombcrypto abertas que não sejam do bombcrypto!
+
 ## Funções extras:
 - Envios de notificações via Telegram:
 	- Aviso de Inicialização do Bot

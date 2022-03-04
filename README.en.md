@@ -1,5 +1,8 @@
 # BOT - MultiAccount for BombCrypto - v 0.4.0
 
+CAUTION:
+- Do not use the bot next to open windows named Bombcrypto other than bombcrypto!
+
 ## Extra functions:
 - Sending notifications via Telegram:
   - Bot Startup Notice
