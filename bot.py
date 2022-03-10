@@ -360,7 +360,7 @@ class Bot:
     left = left
     top = top
     width = 200
-    height = 45
+    height = 150
 
     myscreen = AutoUI.pyautogui.screenshot(region=(left, top, width, height))
     print(f'r = {left}, {top}, {width}, {height}')
