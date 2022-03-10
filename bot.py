@@ -357,10 +357,10 @@ class Bot:
         return
 
     left, top, width, height = coins_pos[0]
-    left = left - 44
-    top = top + 130
+    left = left
+    top = top
     width = 200
-    height = 50
+    height = 45
 
     myscreen = AutoUI.pyautogui.screenshot(region=(left, top, width, height))
     print(f'r = {left}, {top}, {width}, {height}')
